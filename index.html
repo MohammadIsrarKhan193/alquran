@@ -4,29 +4,33 @@
   <meta charset="UTF-8" />
   <title>📖 Al-Qur'an</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Arabic Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>📖 Al-Qur'an</h1>
-    <p>Arabic + English (Saheeh International)</p>
-  </header>
-  <main class="container">
-    <aside>
-      <h2>Surahs</h2>
-      <div id="surahList">Loading surahs...</div>
-    </aside>
-    <section>
-      <h2 id="surahTitle">Select a Surah</h2>
-      <div class="audio-controls">
-        <button onclick="playAudio()">▶ Play</button>
-        <button onclick="pauseAudio()">⏸ Pause</button>
-        <span id="audioStatus">Loading audio...</span>
-        <audio id="audio"></audio>
-      </div>
-      <div id="ayahs"></div>
-    </section>
-  </main>
-  <script src="script.js"></script>
+
+<header>
+  <h1>📖 Al-Qur'an</h1>
+  <p>Arabic + English (Saheeh International)</p>
+</header>
+
+<main class="container">
+
+  <aside id="surah-list">
+    <h2>Surahs</h2>
+    <p id="loading">Loading surahs...</p>
+  </aside>
+
+  <section id="content">
+    <h2 id="surah-title">Select a Surah</h2>
+    <div id="ayahs"></div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
