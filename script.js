@@ -32,24 +32,24 @@ function loadSurah(number, name) {
     fetch(`https://api.alquran.cloud/v1/surah/${number}`).then(r => r.json()),
     fetch(`https://api.alquran.cloud/v1/surah/${number}/en.sahih`).then(r => r.json())
   ])
-    .then(([arabic, english]) => {
-      ayahsDiv.innerHTML = "";
+  .then(([arabic, english]) => {
+    ayahsDiv.innerHTML = "";
 
-      arabic.data.ayahs.forEach((ayah, i) => {
-        const a = document.createElement("div");
-        a.className = "arabic";
-        a.textContent = ayah.text;
+    arabic.data.ayahs.forEach((ayah, i) => {
+      const ar = document.createElement("div");
+      ar.className = "arabic";
+      ar.textContent = ayah.text;
 
-        const e = document.createElement("div");
-        e.className = "translation";
-        e.textContent = english.data.ayahs[i].text;
+      const en = document.createElement("div");
+      en.className = "translation";
+      en.textContent = english.data.ayahs[i].text;
 
-        ayahsDiv.appendChild(a);
-        ayahsDiv.appendChild(e);
-      });
-    })
-    .catch(err => {
-      ayahsDiv.innerHTML = "Error loading surah ❌";
-      console.error(err);
+      ayahsDiv.appendChild(ar);
+      ayahsDiv.appendChild(en);
     });
+  })
+  .catch(err => {
+    ayahsDiv.innerHTML = "Error loading surah ❌";
+    console.error(err);
+  });
 }
