@@ -1,46 +1,69 @@
-console.log("Qur'an script loaded");
+console.log("Qur'an App Loaded ✅");
 
 const surahList = document.getElementById("surah-list");
-const surahTitle = document.getElementById("surah-title");
 const ayahsDiv = document.getElementById("ayahs");
+const surahTitle = document.getElementById("surah-title");
+const loading = document.getElementById("loading");
 
-/* ===============================
-   LOAD SURAH LIST
-================================ */
+/* LOAD SURAH LIST */
 fetch("https://api.quran.com/api/v4/chapters")
   .then(res => res.json())
   .then(data => {
-    data.chapters.forEach(surah => {
+    loading.remove();
+
+    data.chapters.forEach(chapter => {
       const btn = document.createElement("button");
-      btn.className = "surah-btn";
-      btn.innerText = `${surah.id}. ${surah.name_simple}`;
-      btn.onclick = () => loadSurah(surah.id);
+      btn.textContent = `${chapter.id}. ${chapter.name_simple}`;
+      btn.onclick = () => loadSurah(chapter.id, chapter.name_simple);
       surahList.appendChild(btn);
     });
   })
-  .catch(err => console.error("Surah list error:", err));
+  .catch(err => {
+    loading.textContent = "Failed to load surahs ❌";
+    console.error(err);
+  });
 
-/* ===============================
-   LOAD SURAH AYĀHS
-================================ */
-function loadSurah(chapterId) {
-  ayahsDiv.innerHTML = "";
-  surahTitle.innerText = "Loading...";
+/* LOAD SURAH (ARABIC + ENGLISH) */
+function loadSurah(id, name) {
+  surahTitle.textContent = `Surah ${name}`;
+  ayahsDiv.innerHTML = "Loading...";
 
-  fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${chapterId}`)
-    .then(res => res.json())
-    .then(data => {
-      surahTitle.innerText = `Surah ${chapterId}`;
+  Promise.all([
+    fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${id}`).then(r => r.json()),
+    fetch(`https://api.quran.com/api/v4/quran/translations/131?chapter_number=${id}`).then(r => r.json())
+  ])
+  .then(([arabicData, englishData]) => {
+    ayahsDiv.innerHTML = "";
 
-      data.verses.forEach(verse => {
-        const p = document.createElement("p");
-        p.className = "ayah";
-        p.innerText = verse.text_uthmani;
-        ayahsDiv.appendChild(p);
-      });
-    })
-    .catch(err => {
-      surahTitle.innerText = "Failed to load ayahs";
-      console.error("Ayah error:", err);
+    /* BISMILLAH (Except Surah 9) */
+    if (id !== 9) {
+      const bismillah = document.createElement("div");
+      bismillah.className = "arabic";
+      bismillah.style.textAlign = "center";
+      bismillah.textContent = "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ";
+      ayahsDiv.appendChild(bismillah);
+    }
+
+    arabicData.verses.forEach((v, i) => {
+      const arabic = document.createElement("div");
+      arabic.className = "arabic";
+      arabic.textContent = v.text_uthmani;
+
+      const english = document.createElement("div");
+      english.className = "translation";
+      english.textContent = englishData.translations[i].text.replace(/<[^>]*>/g, "");
+
+      const num = document.createElement("div");
+      num.className = "ayah-number";
+      num.textContent = `Ayah ${i + 1}`;
+
+      ayahsDiv.appendChild(arabic);
+      ayahsDiv.appendChild(english);
+      ayahsDiv.appendChild(num);
     });
+  })
+  .catch(err => {
+    ayahsDiv.innerHTML = "Error loading surah ❌";
+    console.error(err);
+  });
 }
