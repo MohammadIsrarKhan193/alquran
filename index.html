@@ -11,7 +11,14 @@
 
 <header>
   <h1>📖 Al-Qur'an</h1>
-  <p>Arabic + English (Saheeh International)</p>
+  <div class="controls">
+    <select id="lang-select">
+      <option value="en.sahih">English (Sahih)</option>
+      <option value="ps.abdulwali">Pashto (Abul Wali)</option>
+      <option value="ur.ahmedali">Urdu (Ahmed Ali)</option>
+      <option value="fa.ansarian">Persian (Ansarian)</option>
+    </select>
+  </div>
 </header>
 
 <div class="app-container">
@@ -21,7 +28,7 @@
 
   <main id="content">
     <h2 id="surah-title">Select a Surah</h2>
-    <div id="bismillah" class="arabic"></div>
+    <div id="bismillah"></div>
     <div id="ayahs"></div>
   </main>
 </div>
