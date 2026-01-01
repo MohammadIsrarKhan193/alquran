@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>📖 Al-Qur'an</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Arabic Font -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -17,19 +14,16 @@
   <p>Arabic + English (Saheeh International)</p>
 </header>
 
-<main class="container">
-
+<div class="app">
   <aside id="surah-list">
-    <h2>Surahs</h2>
-    <p id="loading">Loading surahs...</p>
+    <p class="loading">Loading Surahs…</p>
   </aside>
 
-  <section id="content">
+  <main>
     <h2 id="surah-title">Select a Surah</h2>
     <div id="ayahs"></div>
-  </section>
-
-</main>
+  </main>
+</div>
 
 <script src="script.js"></script>
 </body>
