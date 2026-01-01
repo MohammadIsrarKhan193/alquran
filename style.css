@@ -1,17 +1,27 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f4f6f5;
+  background: #0f172a;
+  color: #f8fafc;
 }
 
 header {
-  background: #1b5e20;
-  color: white;
-  padding: 16px;
   text-align: center;
+  padding: 15px;
+  background: #020617;
 }
 
-.app {
+header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+header p {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.container {
   display: flex;
   height: calc(100vh - 90px);
 }
@@ -19,48 +29,51 @@ header {
 #surah-list {
   width: 35%;
   overflow-y: auto;
-  background: #ffffff;
-  border-right: 1px solid #ddd;
+  background: #020617;
   padding: 10px;
 }
 
-#surah-list button {
+#content {
+  width: 65%;
+  overflow-y: auto;
+  padding: 15px;
+}
+
+.surah-btn {
   width: 100%;
   padding: 10px;
   margin-bottom: 6px;
   border: none;
-  background: #e8f5e9;
-  color: #1b5e20;
-  font-size: 15px;
-  border-radius: 6px;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #f8fafc;
   cursor: pointer;
 }
 
-#surah-list button:hover {
-  background: #1b5e20;
-  color: white;
-}
-
-main {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
+.surah-btn:hover {
+  background: #334155;
 }
 
 #surah-title {
+  margin-top: 0;
   text-align: center;
-  color: #1b5e20;
+}
+
+.ayah-box {
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #334155;
 }
 
 .arabic {
   font-family: 'Amiri', serif;
-  font-size: 24px;
+  font-size: 22px;
   text-align: right;
-  margin: 15px 0 5px;
+  direction: rtl;
+  margin-bottom: 5px;
 }
 
 .english {
   font-size: 14px;
-  color: #444;
-  margin-bottom: 15px;
+  color: #cbd5f5;
 }
