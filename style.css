@@ -68,3 +68,23 @@ header {
   font-size: 13px;
   color: #777;
 }
+
+.ayah-block {
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.ayah-ar {
+  font-size: 26px;
+  line-height: 2.2;
+  text-align: right;
+  font-family: "Amiri", serif;
+}
+
+.ayah-en {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #555;
+  margin-top: 8px;
+}
