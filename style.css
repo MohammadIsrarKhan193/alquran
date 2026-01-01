@@ -1,24 +1,35 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: #f4f4f0; /* Cream background like the screenshot */
+  background: #f4f4f0;
   color: #1a1a1a;
 }
 
 header {
-  text-align: center;
-  padding: 10px;
-  background: #7ca37c; /* Green header like the screenshot */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #7ca37c;
   color: white;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.app-container { display: flex; height: calc(100vh - 70px); }
+header h1 { font-size: 20px; margin: 0; }
+
+#lang-select {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+}
+
+.app-container { display: flex; height: calc(100vh - 65px); }
 
 #surah-list {
-  width: 25%;
+  width: 250px;
   overflow-y: auto;
   background: #e9e9e2;
   padding: 10px;
@@ -26,15 +37,15 @@ header {
 }
 
 #content {
-  width: 75%;
+  flex-grow: 1;
   overflow-y: auto;
-  padding: 30px;
+  padding: 20px;
   background: #ffffff;
 }
 
 .surah-btn {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 5px;
   border: 1px solid #d1d1c1;
   border-radius: 4px;
@@ -45,75 +56,61 @@ header {
 
 .surah-btn:hover { background: #7ca37c; color: white; }
 
-/* Arabic Style */
-.arabic-container {
+/* Ayah Row Layout */
+.ayah-row {
+  margin-bottom: 35px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.arabic-side {
   direction: rtl;
-  text-align: justify;
-  line-height: 2.5;
-  margin-bottom: 40px;
+  margin-bottom: 15px;
 }
 
 .arabic-text {
   font-family: 'Amiri', serif;
-  font-size: 32px;
-  word-spacing: 5px;
+  font-size: 30px;
+  line-height: 2;
+  color: #000;
 }
 
-/* Inline Ayah Number Circle */
 .inline-ayah-number {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: 1px solid #555;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #7ca37c;
   border-radius: 50%;
   font-size: 14px;
-  font-family: sans-serif;
-  margin: 0 5px;
-  vertical-align: middle;
-  background: #f9f9f9;
-}
-
-/* Rukū Marker (The 'Ain' symbol) */
-.ruku-marker {
-  color: #2e7d32;
-  font-weight: bold;
-  font-size: 20px;
   margin: 0 10px;
-  vertical-align: super;
+  color: #7ca37c;
 }
 
-/* Bismillah and Title */
+.translation {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.rtl-text { direction: rtl; text-align: right; font-family: 'Amiri', serif; font-size: 18px; }
+.ltr-text { direction: ltr; text-align: left; }
+
+.ruku-marker { color: #2e7d32; font-weight: bold; margin: 0 5px; }
+
 #bismillah {
   text-align: center;
-  font-size: 36px;
+  font-size: 32px;
   font-family: 'Amiri', serif;
   margin: 20px 0;
+  color: #333;
 }
 
-#surah-title { text-align: center; border-bottom: 2px solid #7ca37c; padding-bottom: 10px; }
+#surah-title { text-align: center; border-bottom: 2px solid #7ca37c; margin-bottom: 20px; }
 
-/* English Translation Style */
-.english-container {
-  margin-top: 30px;
-  border-top: 2px solid #eee;
-  padding-top: 20px;
-}
-
-.en-box {
-  margin-bottom: 15px;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #444;
-}
-
-hr { border: 0; border-top: 1px solid #eee; margin: 40px 0; }
-
-/* Mobile View */
 @media (max-width: 600px) {
   .app-container { flex-direction: column; }
-  #surah-list { width: 100%; height: 25%; }
-  #content { width: 100%; height: 75%; padding: 15px; }
-  .arabic-text { font-size: 26px; }
+  #surah-list { width: 100%; height: 30%; }
+  .arabic-text { font-size: 24px; }
 }
