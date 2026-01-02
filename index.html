@@ -1,44 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>📖 Al-Qur'an & Adhan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Qur'an Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Scheherazade+New&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="light-theme">
 
-<header>
-  <h1>📖 Al-Qur'an</h1>
-  <div class="controls">
-    <select id="lang-select">
-      <option value="en.sahih">English (Sahih)</option>
-      <option value="ps.abdulwali">Pashto (Abul Wali)</option>
-      <option value="ur.ahmedali">Urdu (Ahmed Ali)</option>
-      <option value="fa.ansarian">Persian (Ansarian)</option>
-    </select>
-  </div>
-</header>
+    <header>
+        <div class="nav-top">
+            <button id="menu-btn">☰</button>
+            <h1>Al-Qur'an</h1>
+            <button id="settings-btn">⚙️</button>
+        </div>
+        <div id="search-container">
+            <input type="text" id="surah-search" placeholder="Search Surah (e.g. Yaseen)...">
+        </div>
+    </header>
 
-<div class="app-container">
-  <aside id="surah-list">
-    <div id="prayer-times">
-        <h3>🕌 Prayer Times</h3>
-        <div id="times-list">Loading times...</div>
+    <div class="main-layout">
+        <aside id="sidebar" class="hidden">
+            <div class="adhan-card">
+                <h3>🕌 Prayer Times</h3>
+                <div id="times-list">Loading...</div>
+            </div>
+            <div id="surah-list">
+                <p id="loading">Loading Surahs…</p>
+            </div>
+        </aside>
+
+        <main id="reader">
+            <div id="settings-panel" class="hidden">
+                <h4>Settings</h4>
+                <label>Language:</label>
+                <select id="lang-select">
+                    <option value="en.sahih">English</option>
+                    <option value="ps.abdulwali">Pashto</option>
+                    <option value="ur.ahmedali">Urdu</option>
+                    <option value="fa.ansarian">Persian</option>
+                </select>
+                <label>Font Size:</label>
+                <input type="range" id="font-slider" min="20" max="50" value="30">
+                <button id="theme-toggle">Switch Theme 🌓</button>
+            </div>
+
+            <h2 id="surah-title">Select a Surah</h2>
+            <div id="bismillah"></div>
+            <div id="ayah-container"></div>
+        </main>
     </div>
-    <hr>
-    <h3>📜 Surahs</h3>
-    <p id="loading">Loading Surahs…</p>
-  </aside>
 
-  <main id="content">
-    <h2 id="surah-title">Select a Surah</h2>
-    <div id="bismillah"></div>
-    <div id="ayahs"></div>
-  </main>
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
