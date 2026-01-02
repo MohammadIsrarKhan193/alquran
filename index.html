@@ -11,8 +11,8 @@
 
     <div id="splash-screen">
         <div class="splash-content">
-            <img src="logo.png" alt="Al Quran Logo" class="splash-logo">
-            <h1 class="splash-text">Al-Qur'an</h1>
+            <h1 class="splash-text">Al-Qur'an Pro</h1>
+            <p>Sadaqah Jariyah Project</p>
             <div class="loader"></div>
         </div>
     </div>
@@ -21,22 +21,29 @@
         <div class="nav-top">
             <button id="menu-btn">☰</button>
             <h1>Al-Qur'an</h1>
-            <button id="settings-btn">⚙️</button>
+            <div class="header-icons">
+                <button id="premium-btn">💎 PRO</button>
+                <button id="settings-btn">⚙️</button>
+            </div>
         </div>
         <div id="search-container">
-            <input type="text" id="surah-search" placeholder="Search Surah (e.g. Yaseen)...">
+            <input type="text" id="surah-search" placeholder="Search 114 Surahs...">
         </div>
     </header>
 
     <div class="main-layout">
         <aside id="sidebar" class="hidden">
+            <div class="donation-box">
+                <h4>Sadaqah Jariyah ❤️</h4>
+                <p>Support this app to keep it ad-free.</p>
+                <button class="donate-btn">Support Us</button>
+            </div>
             <div class="adhan-card">
                 <h3>🕌 Prayer Times</h3>
-                <div id="times-list">Loading...</div>
+                <div id="times-list">Detecting Location...</div>
             </div>
-            <div id="surah-list">
-                <p id="loading">Loading Surahs…</p>
-            </div>
+            <hr>
+            <div id="surah-list"></div>
         </aside>
 
         <main id="reader">
@@ -50,13 +57,17 @@
                     <option value="fa.ansarian">Persian</option>
                 </select>
                 <label>Font Size:</label>
-                <input type="range" id="font-slider" min="20" max="50" value="30">
-                <button id="theme-toggle">Switch Theme 🌓</button>
+                <input type="range" id="font-slider" min="20" max="60" value="30">
+                <button id="theme-toggle">Dark/Light Mode 🌓</button>
             </div>
 
             <h2 id="surah-title">Select a Surah</h2>
             <div id="bismillah"></div>
             <div id="ayah-container"></div>
+            
+            <footer id="pro-footer">
+                <p>May Allah accept this as Sadaqah Jariyah. 🤲</p>
+            </footer>
         </main>
     </div>
 
