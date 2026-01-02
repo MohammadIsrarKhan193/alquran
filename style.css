@@ -1,32 +1,39 @@
-body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f4f0; color: #1a1a1a; }
-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #7ca37c; color: white; position: sticky; top: 0; z-index: 100; }
-.app-container { display: flex; height: calc(100vh - 65px); }
+:root { --primary: #2e7d32; --bg: #f8f9fa; --card: #ffffff; --text: #333; }
+.dark-theme { --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --primary: #81c784; }
 
-#surah-list { width: 280px; overflow-y: auto; background: #e9e9e2; padding: 15px; border-right: 1px solid #ccc; }
-#content { flex-grow: 1; overflow-y: auto; padding: 20px; background: #ffffff; }
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; }
 
-/* Prayer Times Style */
-#prayer-times { background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #d1d1c1; margin-bottom: 20px; }
-#prayer-times h3 { margin: 0 0 10px 0; font-size: 16px; color: #7ca37c; text-align: center; }
-.prayer-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; padding: 2px 5px; border-bottom: 1px dotted #ccc; }
+header { background: var(--primary); color: white; padding: 10px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.nav-top { display: flex; justify-content: space-between; align-items: center; }
+#search-container input { width: 95%; margin-top: 10px; padding: 8px; border-radius: 20px; border: none; outline: none; }
 
-.surah-btn { width: 100%; padding: 10px; margin-bottom: 5px; border: 1px solid #d1d1c1; border-radius: 4px; background: #fdfdfb; cursor: pointer; text-align: left; transition: 0.3s; }
-.surah-btn:hover { background: #7ca37c; color: white; }
+.main-layout { display: flex; height: calc(100vh - 90px); }
 
-.ayah-row { margin-bottom: 35px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-.arabic-side { direction: rtl; margin-bottom: 15px; }
-.arabic-text { font-family: 'Amiri', serif; font-size: 28px; line-height: 2; color: #000; }
-.inline-ayah-number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid #7ca37c; border-radius: 50%; font-size: 12px; margin: 0 10px; color: #7ca37c; }
+#sidebar { width: 300px; background: var(--card); border-right: 1px solid #ddd; overflow-y: auto; transition: 0.3s; }
+#sidebar.hidden { margin-left: -300px; }
 
-.translation { font-size: 16px; color: #555; line-height: 1.6; }
-.rtl-text { direction: rtl; text-align: right; font-family: 'Amiri', serif; font-size: 18px; }
-.ltr-text { direction: ltr; text-align: left; }
+#reader { flex-grow: 1; overflow-y: auto; padding: 20px; position: relative; }
 
-#bismillah { text-align: center; font-size: 32px; font-family: 'Amiri', serif; margin: 20px 0; }
-#surah-title { text-align: center; border-bottom: 2px solid #7ca37c; margin-bottom: 20px; padding-bottom: 10px; }
+/* Settings Panel */
+#settings-panel { position: absolute; right: 20px; top: 20px; background: var(--card); padding: 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 100; border: 1px solid var(--primary); }
+.hidden { display: none; }
 
-@media (max-width: 600px) {
-  .app-container { flex-direction: column; }
-  #surah-list { width: 100%; height: 35%; }
-  .arabic-text { font-size: 24px; }
+/* Cards Style */
+.surah-card { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.surah-card:hover { background: #f0f0f0; }
+
+.ayah-card { background: var(--card); margin-bottom: 15px; padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+.arabic-text { font-family: 'Amiri', serif; line-height: 2.2; display: block; direction: rtl; text-align: right; }
+.ay-num { color: var(--primary); font-weight: bold; border: 1px solid var(--primary); border-radius: 50%; width: 25px; height: 25px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 10px; }
+
+.tr-line { margin-top: 15px; color: #666; font-size: 16px; border-top: 1px solid #f0f0f0; padding-top: 10px; }
+#bismillah { text-align: center; font-family: 'Amiri'; font-size: 28px; margin: 20px; color: var(--primary); }
+
+.ruku { color: red; font-weight: bold; margin: 0 5px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    #sidebar { position: fixed; height: 100%; z-index: 999; }
+    #reader { width: 100%; }
 }
