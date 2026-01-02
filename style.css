@@ -1,116 +1,32 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #f4f4f0;
-  color: #1a1a1a;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background: #7ca37c;
-  color: white;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-header h1 { font-size: 20px; margin: 0; }
-
-#lang-select {
-  padding: 5px;
-  border-radius: 5px;
-  border: none;
-  font-weight: bold;
-}
-
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f4f0; color: #1a1a1a; }
+header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #7ca37c; color: white; position: sticky; top: 0; z-index: 100; }
 .app-container { display: flex; height: calc(100vh - 65px); }
 
-#surah-list {
-  width: 250px;
-  overflow-y: auto;
-  background: #e9e9e2;
-  padding: 10px;
-  border-right: 1px solid #ccc;
-}
+#surah-list { width: 280px; overflow-y: auto; background: #e9e9e2; padding: 15px; border-right: 1px solid #ccc; }
+#content { flex-grow: 1; overflow-y: auto; padding: 20px; background: #ffffff; }
 
-#content {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 20px;
-  background: #ffffff;
-}
+/* Prayer Times Style */
+#prayer-times { background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #d1d1c1; margin-bottom: 20px; }
+#prayer-times h3 { margin: 0 0 10px 0; font-size: 16px; color: #7ca37c; text-align: center; }
+.prayer-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; padding: 2px 5px; border-bottom: 1px dotted #ccc; }
 
-.surah-btn {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 5px;
-  border: 1px solid #d1d1c1;
-  border-radius: 4px;
-  background: #fdfdfb;
-  cursor: pointer;
-  text-align: left;
-}
-
+.surah-btn { width: 100%; padding: 10px; margin-bottom: 5px; border: 1px solid #d1d1c1; border-radius: 4px; background: #fdfdfb; cursor: pointer; text-align: left; transition: 0.3s; }
 .surah-btn:hover { background: #7ca37c; color: white; }
 
-/* Ayah Row Layout */
-.ayah-row {
-  margin-bottom: 35px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
-}
+.ayah-row { margin-bottom: 35px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+.arabic-side { direction: rtl; margin-bottom: 15px; }
+.arabic-text { font-family: 'Amiri', serif; font-size: 28px; line-height: 2; color: #000; }
+.inline-ayah-number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid #7ca37c; border-radius: 50%; font-size: 12px; margin: 0 10px; color: #7ca37c; }
 
-.arabic-side {
-  direction: rtl;
-  margin-bottom: 15px;
-}
-
-.arabic-text {
-  font-family: 'Amiri', serif;
-  font-size: 30px;
-  line-height: 2;
-  color: #000;
-}
-
-.inline-ayah-number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid #7ca37c;
-  border-radius: 50%;
-  font-size: 14px;
-  margin: 0 10px;
-  color: #7ca37c;
-}
-
-.translation {
-  font-size: 16px;
-  color: #555;
-  line-height: 1.6;
-}
-
+.translation { font-size: 16px; color: #555; line-height: 1.6; }
 .rtl-text { direction: rtl; text-align: right; font-family: 'Amiri', serif; font-size: 18px; }
 .ltr-text { direction: ltr; text-align: left; }
 
-.ruku-marker { color: #2e7d32; font-weight: bold; margin: 0 5px; }
-
-#bismillah {
-  text-align: center;
-  font-size: 32px;
-  font-family: 'Amiri', serif;
-  margin: 20px 0;
-  color: #333;
-}
-
-#surah-title { text-align: center; border-bottom: 2px solid #7ca37c; margin-bottom: 20px; }
+#bismillah { text-align: center; font-size: 32px; font-family: 'Amiri', serif; margin: 20px 0; }
+#surah-title { text-align: center; border-bottom: 2px solid #7ca37c; margin-bottom: 20px; padding-bottom: 10px; }
 
 @media (max-width: 600px) {
   .app-container { flex-direction: column; }
-  #surah-list { width: 100%; height: 30%; }
+  #surah-list { width: 100%; height: 35%; }
   .arabic-text { font-size: 24px; }
 }
