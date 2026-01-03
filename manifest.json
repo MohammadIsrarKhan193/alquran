@@ -1,0 +1,17 @@
+{
+  "name": "Al-Qur'an Pro",
+  "short_name": "Al-Qur'an",
+  "description": "Read the Holy Qur'an online, verse by verse, anytime, anywhere.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#2e7d32",
+  "theme_color": "#2e7d32",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
