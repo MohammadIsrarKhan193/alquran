@@ -1,4 +1,4 @@
-const cacheName = 'alquran-v1';
+const cacheName = 'alquran-pro-v1';
 const assets = [
   './',
   './index.html',
@@ -6,7 +6,7 @@ const assets = [
   './script.js',
   './manifest.json',
   './logo.png',
-  './privacy.html'
+  'https://fonts.googleapis.com/css2?family=Amiri&family=Scheherazade+New&display=swap'
 ];
 
 self.addEventListener('install', e => {
