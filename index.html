@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al-Qur'an Pro</title>
+    
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2e7d32">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="logo.png">
+
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Scheherazade+New&display=swap" rel="stylesheet">
 </head>
@@ -13,7 +20,7 @@
     <div id="splash-screen">
         <div class="splash-content">
             <h1>Al-Qur'an Pro</h1>
-            <p>V1.0 • Sadaqah Jariyah</p>
+            <p>Sadaqah Jariyah</p>
             <div class="loader"></div>
         </div>
     </div>
@@ -23,12 +30,8 @@
             <button id="menu-btn">☰</button>
             <h1>Al-Qur'an</h1>
             <div class="header-icons">
-                <button id="premium-btn">💎 PRO</button>
                 <button id="settings-btn">⚙️</button>
             </div>
-        </div>
-        <div id="search-container">
-            <input type="text" id="surah-search" placeholder="Search 114 Surahs...">
         </div>
     </header>
 
@@ -36,48 +39,26 @@
         <aside id="sidebar" class="hidden">
             <div class="adhan-card">
                 <h3>🕌 Prayer Times</h3>
-                <div id="times-list">Detecting Location...</div>
-            </div>
-            <div class="donation-box">
-                <h4>Sadaqah Jariyah ❤️</h4>
-                <button class="donate-btn">Support the App</button>
+                <div id="times-list">Loading...</div>
             </div>
             <div id="surah-list"></div>
             <div class="sidebar-footer">
-                <a href="privacy.html" style="color: #777; font-size: 12px;">Privacy Policy</a>
+                <a href="privacy.html" style="font-size: 12px; color: grey;">Privacy Policy</a>
             </div>
         </aside>
 
         <main id="reader">
-            <div id="settings-panel" class="hidden">
-                <h4>Settings</h4>
-                <label>Translation:</label>
-                <select id="lang-select">
-                    <option value="en.sahih">English (Sahih)</option>
-                    <option value="ps.abdulwali">Pashto (Abdul Wali)</option>
-                    <option value="ur.ahmedali">Urdu (Ahmed Ali)</option>
-                    <option value="fa.ansarian">Persian (Ansarian)</option>
-                </select>
-                <label>Font Size:</label>
-                <input type="range" id="font-slider" min="20" max="60" value="30">
-                <button id="theme-toggle">Change Theme 🌓</button>
-            </div>
-
             <h2 id="surah-title">Select a Surah</h2>
-            <div id="bismillah"></div>
             <div id="ayah-container"></div>
-            <footer id="pro-footer">May Allah accept this as Sadaqah Jariyah. 🤲🏻</footer>
         </main>
     </div>
 
     <script src="script.js"></script>
     <script>
+        // Universal Service Worker Registration
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('Service Worker Registered!'))
-                .catch(err => console.log('Service Worker Failed', err));
-            });
+            navigator.serviceWorker.register('sw.js')
+            .then(() => console.log("Offline Mode Ready"));
         }
     </script>
 </body>
