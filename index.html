@@ -5,47 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al-Qur'an Pro</title>
     <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="logo.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Scheherazade+New&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="light-theme">
+
     <div id="splash-screen">
         <h1>Al-Qur'an Pro</h1>
         <div class="loader"></div>
     </div>
+
     <header>
         <div class="nav-top">
-            <button onclick="toggleSidebar()">☰</button>
+            <button id="menu-btn">☰</button>
             <h1>Al-Qur'an</h1>
-            <select id="lang-select" onchange="init()">
+            <select id="lang-select">
                 <option value="en.sahih">English</option>
                 <option value="ps.abdulwali">Pashto</option>
                 <option value="ur.ahmedali">Urdu</option>
+                <option value="fa.ansarian">Dari/Persian</option>
+                <option value="de.aburida">Deutsch</option>
+                <option value="fr.hamidullah">French</option>
             </select>
         </div>
     </header>
-    <main id="main-content">
-        <div id="dashboard">
-            <div class="greeting-card">
-                <p>15 Rajab 1447 AH</p>
-                <h2>Kabul, AF</h2>
-            </div>
-            <div class="feature-grid">
-                <div class="icon-item" onclick="toggleSidebar()">
-                    <div class="icon-circle gold">📖</div><span>Read</span>
+
+    <div class="main-layout">
+        <aside id="sidebar" class="hidden">
+            <div id="surah-list"></div>
+        </aside>
+
+        <main id="main-content">
+            <div id="dashboard">
+                <div class="greeting-card">
+                    <p id="hijri-date">Loading Hijri...</p>
+                    <h2 id="next-prayer">Kabul, AF</h2>
                 </div>
-                <div class="icon-item"><div class="icon-circle green">🕋</div><span>Qibla</span></div>
-                <div class="icon-item"><div class="icon-circle red">🧭</div><span>Times</span></div>
-                <div class="icon-item"><div class="icon-circle blue">📿</div><span>Dua</span></div>
+
+                <div class="feature-grid">
+                    <div class="icon-item" onclick="toggleSidebar()">
+                        <div class="icon-circle gold">📖</div>
+                        <span>Read Quran</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle green">🕋</div>
+                        <span>Qibla</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle red">🧭</div>
+                        <span>Prayers</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle blue">📿</div>
+                        <span>Dua</span>
+                    </div>
+                </div>
+
+                <div class="journey-card">
+                    <div class="journey-text">
+                        <h4>Daily Quran Journey</h4>
+                        <p>Continue your Tilawat</p>
+                    </div>
+                    <div class="arrow">→</div>
+                </div>
             </div>
-        </div>
-        <div id="reader" class="hidden">
-            <button onclick="backHome()" class="back-btn">← Home</button>
-            <h2 id="surah-title"></h2>
-            <div id="ayah-container"></div>
-        </div>
-    </main>
-    <aside id="sidebar" class="hidden"><div id="surah-list"></div></aside>
+
+            <div id="reader" class="hidden">
+                <button onclick="backToDashboard()" class="back-btn">← Back</button>
+                <h2 id="surah-title"></h2>
+                <div id="bismillah" class="arabic-text">بِسْمِ ٱللَّهِ ٱلرَّهْمَٰنِ ٱلرَّحِيمِ</div>
+                <div id="ayah-container"></div>
+            </div>
+        </main>
+    </div>
+
     <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+    </script>
 </body>
 </html>
