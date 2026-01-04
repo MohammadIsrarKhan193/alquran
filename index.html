@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al-Qur'an Pro</title>
-    
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2e7d32">
     
@@ -14,24 +13,36 @@
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Scheherazade+New&display=swap" rel="stylesheet">
+    
+    <style>
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #2e7d32; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: white;
+            z-index: 9999; transition: opacity 0.5s ease;
+        }
+        .loader {
+            border: 4px solid #f3f3f3; border-top: 4px solid #FFD700;
+            border-radius: 50%; width: 40px; height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body class="light-theme">
 
     <div id="splash-screen">
-        <div class="splash-content">
-            <h1>Al-Qur'an Pro</h1>
-            <p>Sadaqah Jariyah</p>
-            <div class="loader"></div>
-        </div>
+        <h1>Al-Qur'an Pro</h1>
+        <p>Sadaqah Jariyah</p>
+        <div class="loader"></div>
     </div>
 
     <header>
         <div class="nav-top">
             <button id="menu-btn">☰</button>
             <h1>Al-Qur'an</h1>
-            <div class="header-icons">
-                <button id="settings-btn">⚙️</button>
-            </div>
+            <button id="settings-btn">⚙️</button>
         </div>
     </header>
 
@@ -39,11 +50,11 @@
         <aside id="sidebar" class="hidden">
             <div class="adhan-card">
                 <h3>🕌 Prayer Times</h3>
-                <div id="times-list">Loading...</div>
+                <div id="times-list">Detecting Location...</div>
             </div>
             <div id="surah-list"></div>
             <div class="sidebar-footer">
-                <a href="privacy.html" style="font-size: 12px; color: grey;">Privacy Policy</a>
+                <a href="privacy.html" style="color: grey; font-size: 12px;">Privacy Policy</a>
             </div>
         </aside>
 
@@ -55,10 +66,17 @@
 
     <script src="script.js"></script>
     <script>
-        // Universal Service Worker Registration
+        // Force splash screen to hide after app loads
+        window.addEventListener('load', () => {
+            const splash = document.getElementById('splash-screen');
+            setTimeout(() => {
+                splash.style.opacity = '0';
+                setTimeout(() => splash.classList.add('hidden'), 500);
+            }, 2000);
+        });
+
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(() => console.log("Offline Mode Ready"));
+            navigator.serviceWorker.register('sw.js');
         }
     </script>
 </body>
