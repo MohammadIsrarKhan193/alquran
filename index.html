@@ -1,31 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>📖 Al-Qur'an</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Qur'an Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Scheherazade+New&display=swap" rel="stylesheet">
 </head>
 <body>
-
-<header>
-  <h1>📖 Al-Qur'an</h1>
-  <p>Arabic + English (Saheeh International)</p>
-</header>
-
-<div class="app-container">
-  <aside id="surah-list">
-    <p id="loading">Loading Surahs…</p>
-  </aside>
-
-  <main id="content">
-    <h2 id="surah-title">Select a Surah</h2>
-    <div id="bismillah" class="arabic"></div>
-    <div id="ayahs"></div>
-  </main>
-</div>
-
-<script src="script.js"></script>
+    <div id="splash-screen">
+        <h1>Al-Qur'an Pro</h1>
+        <div class="loader"></div>
+    </div>
+    <header>
+        <div class="nav-top">
+            <button onclick="toggleSidebar()">☰</button>
+            <h1>Al-Qur'an</h1>
+            <select id="lang-select" onchange="init()">
+                <option value="en.sahih">English</option>
+                <option value="ps.abdulwali">Pashto</option>
+                <option value="ur.ahmedali">Urdu</option>
+            </select>
+        </div>
+    </header>
+    <main id="main-content">
+        <div id="dashboard">
+            <div class="greeting-card">
+                <p>15 Rajab 1447 AH</p>
+                <h2>Kabul, AF</h2>
+            </div>
+            <div class="feature-grid">
+                <div class="icon-item" onclick="toggleSidebar()">
+                    <div class="icon-circle gold">📖</div><span>Read</span>
+                </div>
+                <div class="icon-item"><div class="icon-circle green">🕋</div><span>Qibla</span></div>
+                <div class="icon-item"><div class="icon-circle red">🧭</div><span>Times</span></div>
+                <div class="icon-item"><div class="icon-circle blue">📿</div><span>Dua</span></div>
+            </div>
+        </div>
+        <div id="reader" class="hidden">
+            <button onclick="backHome()" class="back-btn">← Home</button>
+            <h2 id="surah-title"></h2>
+            <div id="ayah-container"></div>
+        </div>
+    </main>
+    <aside id="sidebar" class="hidden"><div id="surah-list"></div></aside>
+    <script src="script.js"></script>
 </body>
 </html>
