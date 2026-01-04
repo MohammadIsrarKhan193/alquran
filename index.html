@@ -5,36 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al-Qur'an Pro</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2e7d32">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="logo.png">
-
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Scheherazade+New&display=swap" rel="stylesheet">
-    
-    <style>
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #2e7d32; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; color: white;
-            z-index: 9999; transition: opacity 0.5s ease;
-        }
-        .loader {
-            border: 4px solid #f3f3f3; border-top: 4px solid #FFD700;
-            border-radius: 50%; width: 40px; height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .hidden { display: none !important; }
-    </style>
 </head>
 <body class="light-theme">
 
     <div id="splash-screen">
         <h1>Al-Qur'an Pro</h1>
-        <p>Sadaqah Jariyah</p>
         <div class="loader"></div>
     </div>
 
@@ -42,42 +21,69 @@
         <div class="nav-top">
             <button id="menu-btn">☰</button>
             <h1>Al-Qur'an</h1>
-            <button id="settings-btn">⚙️</button>
+            <select id="lang-select">
+                <option value="en.sahih">English</option>
+                <option value="ps.abdulwali">Pashto</option>
+                <option value="ur.ahmedali">Urdu</option>
+                <option value="fa.ansarian">Dari/Persian</option>
+                <option value="de.aburida">Deutsch</option>
+                <option value="fr.hamidullah">French</option>
+            </select>
         </div>
     </header>
 
     <div class="main-layout">
         <aside id="sidebar" class="hidden">
-            <div class="adhan-card">
-                <h3>🕌 Prayer Times</h3>
-                <div id="times-list">Detecting Location...</div>
-            </div>
             <div id="surah-list"></div>
-            <div class="sidebar-footer">
-                <a href="privacy.html" style="color: grey; font-size: 12px;">Privacy Policy</a>
-            </div>
         </aside>
 
-        <main id="reader">
-            <h2 id="surah-title">Select a Surah</h2>
-            <div id="ayah-container"></div>
+        <main id="main-content">
+            <div id="dashboard">
+                <div class="greeting-card">
+                    <p id="hijri-date">Loading Hijri...</p>
+                    <h2 id="next-prayer">Kabul, AF</h2>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="icon-item" onclick="toggleSidebar()">
+                        <div class="icon-circle gold">📖</div>
+                        <span>Read Quran</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle green">🕋</div>
+                        <span>Qibla</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle red">🧭</div>
+                        <span>Prayers</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle blue">📿</div>
+                        <span>Dua</span>
+                    </div>
+                </div>
+
+                <div class="journey-card">
+                    <div class="journey-text">
+                        <h4>Daily Quran Journey</h4>
+                        <p>Continue your Tilawat</p>
+                    </div>
+                    <div class="arrow">→</div>
+                </div>
+            </div>
+
+            <div id="reader" class="hidden">
+                <button onclick="backToDashboard()" class="back-btn">← Back</button>
+                <h2 id="surah-title"></h2>
+                <div id="bismillah" class="arabic-text">بِسْمِ ٱللَّهِ ٱلرَّهْمَٰنِ ٱلرَّحِيمِ</div>
+                <div id="ayah-container"></div>
+            </div>
         </main>
     </div>
 
     <script src="script.js"></script>
     <script>
-        // Force splash screen to hide after app loads
-        window.addEventListener('load', () => {
-            const splash = document.getElementById('splash-screen');
-            setTimeout(() => {
-                splash.style.opacity = '0';
-                setTimeout(() => splash.classList.add('hidden'), 500);
-            }, 2000);
-        });
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
 </html>
