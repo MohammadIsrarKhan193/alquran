@@ -1,21 +1,71 @@
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Qur'an Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="splash-screen"><h1>Al-Qur'an Pro</h1></div>
 
-<div id="audio-player-container" class="hidden">
-    <div class="player-controls">
-        <span id="now-playing">Playing: Surah Al-Fatiha</span>
+    <header>
+        <div class="nav-top">
+            <button id="menu-btn" onclick="toggleSidebar()">☰</button>
+            <h1>Al-Qur'an</h1>
+            <select id="lang-select" onchange="init()">
+                <option value="en.sahih">English (Sahih)</option>
+                <option value="ps.abdulwali">Pashto</option>
+                <option value="ur.ahmedali">Urdu</option>
+                <option value="fa.ansarian">Dari</option>
+            </select>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <div id="dashboard">
+            <div class="greeting-card">
+                <p id="hijri-date">Loading Hijri...</p>
+                <h2 id="location-display">Detecting Location...</h2>
+                <p id="next-prayer"></p>
+            </div>
+            <div class="feature-grid">
+                <div class="icon-item" onclick="toggleSidebar()">
+                    <div class="icon-circle gold">📖</div><span>Read</span>
+                </div>
+                <div class="icon-item" onclick="alert('Compass Loading...')">
+                    <div class="icon-circle green">🕋</div><span>Qibla</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-circle red">🧭</div><span>Times</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-circle blue">📿</div><span>Dua</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="reader" class="hidden">
+            <div class="reader-controls">
+                <button onclick="backHome()" class="back-btn">← Home</button>
+                <select id="reciter-select">
+                    <option value="ar.abdurrahmansudais">Sheikh Sudais</option>
+                    <option value="ar.alafasy">Mishary Alafasy</option>
+                </select>
+            </div>
+            <h2 id="surah-title"></h2>
+            <div id="bismillah" class="arabic-font">بِسْمِ ٱللَّهِ ٱلرَّهْمَٰنِ ٱلرَّحِيمِ</div>
+            <div id="ayah-container"></div>
+        </div>
+    </main>
+
+    <div id="audio-bar" class="hidden">
         <audio id="main-audio" controls></audio>
-        <button onclick="closeAudio()">×</button>
     </div>
-</div>
 
-<div id="reader" class="hidden">
-    <div class="reader-header">
-        <button onclick="backToDashboard()">←</button>
-        <h2 id="surah-title"></h2>
-        <select id="reciter-select">
-            <option value="ar.abdurrahmansudais">Sheikh Sudais</option>
-            <option value="ar.alafasy">Mishary Alafasy</option>
-        </select>
-    </div>
-    <div id="ayah-container"></div>
-</div>
+    <aside id="sidebar" class="hidden"><div id="surah-list"></div></aside>
+
+    <script src="script.js"></script>
+</body>
+</html>
