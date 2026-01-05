@@ -8,17 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="splash-screen"><h1>Al-Qur'an Pro</h1></div>
-
     <header>
         <div class="nav-top">
-            <button id="menu-btn" onclick="toggleSidebar()">☰</button>
+            <button onclick="toggleSidebar()">☰</button>
             <h1>Al-Qur'an</h1>
             <select id="lang-select" onchange="init()">
                 <option value="en.sahih">English (Sahih)</option>
                 <option value="ps.abdulwali">Pashto</option>
                 <option value="ur.ahmedali">Urdu</option>
-                <option value="fa.ansarian">Dari</option>
             </select>
         </div>
     </header>
@@ -26,46 +23,42 @@
     <main id="main-content">
         <div id="dashboard">
             <div class="greeting-card">
-                <p id="hijri-date">Loading Hijri...</p>
-                <h2 id="location-display">Detecting Location...</h2>
-                <p id="next-prayer"></p>
+                <p id="hijri-date">16 Rajab 1447 AH</p>
+                <h2 id="prayer-time">Global Times Loading...</h2>
             </div>
             <div class="feature-grid">
-                <div class="icon-item" onclick="toggleSidebar()">
-                    <div class="icon-circle gold">📖</div><span>Read</span>
-                </div>
-                <div class="icon-item" onclick="alert('Compass Loading...')">
-                    <div class="icon-circle green">🕋</div><span>Qibla</span>
-                </div>
-                <div class="icon-item">
-                    <div class="icon-circle red">🧭</div><span>Times</span>
-                </div>
-                <div class="icon-item">
-                    <div class="icon-circle blue">📿</div><span>Dua</span>
-                </div>
+                <div class="icon-item" onclick="toggleSidebar()"><div class="icon-circle gold">📖</div><span>Read</span></div>
+                <div class="icon-item" onclick="openQibla()"><div class="icon-circle green">🕋</div><span>Qibla</span></div>
+                <div class="icon-item" onclick="alert('Prayer Times Feature')"><div class="icon-circle red">🧭</div><span>Times</span></div>
+                <div class="icon-item" onclick="alert('Dua Feature')"><div class="icon-circle blue">📿</div><span>Dua</span></div>
+            </div>
+        </div>
+
+        <div id="qibla-view" class="hidden">
+            <button onclick="backHome()" class="back-btn">← Back</button>
+            <div class="compass-container">
+                <div id="compass-needle" class="compass">🧭</div>
+                <p>Rotate phone to find Qibla</p>
             </div>
         </div>
 
         <div id="reader" class="hidden">
-            <div class="reader-controls">
-                <button onclick="backHome()" class="back-btn">← Home</button>
+            <div class="reader-header">
+                <button onclick="backHome()" class="back-btn">← Back</button>
                 <select id="reciter-select">
                     <option value="ar.abdurrahmansudais">Sheikh Sudais</option>
                     <option value="ar.alafasy">Mishary Alafasy</option>
                 </select>
             </div>
-            <h2 id="surah-title"></h2>
-            <div id="bismillah" class="arabic-font">بِسْمِ ٱللَّهِ ٱلرَّهْمَٰنِ ٱلرَّحِيمِ</div>
             <div id="ayah-container"></div>
         </div>
     </main>
 
-    <div id="audio-bar" class="hidden">
-        <audio id="main-audio" controls></audio>
+    <div id="audio-player" class="hidden">
+        <audio id="main-audio" controls autoplay></audio>
     </div>
 
     <aside id="sidebar" class="hidden"><div id="surah-list"></div></aside>
-
     <script src="script.js"></script>
 </body>
 </html>
