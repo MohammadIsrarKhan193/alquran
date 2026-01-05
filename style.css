@@ -1,19 +1,29 @@
-:root { --primary: #1a3c34; --green: #2e7d32; }
-body { margin: 0; font-family: sans-serif; background: #f8f9fa; }
+:root { --primary: #1a3c34; --green: #2e7d32; --gold: #ffd700; }
+body { margin: 0; font-family: sans-serif; background: #f4f7f6; overflow-x: hidden; }
 .hidden { display: none !important; }
 
-.arabic-font { font-family: 'Amiri', serif; font-size: 32px; direction: rtl; text-align: right; line-height: 2; padding: 15px; }
+/* FIXING ARABIC SPELLING */
+.arabic-font { 
+    font-family: 'Amiri', serif; 
+    font-size: 32px; 
+    direction: rtl; 
+    text-align: right; 
+    line-height: 2.2; 
+    padding: 10px; 
+}
 
 header { background: var(--primary); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; }
-.nav-top { display: flex; justify-content: space-between; align-items: center; }
-
-.greeting-card { background: linear-gradient(var(--primary), var(--green)); color: white; padding: 30px 20px; text-align: center; border-radius: 0 0 25px 25px; }
+.greeting-card { background: linear-gradient(var(--primary), var(--green)); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 30px 30px; }
 .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 20px; margin-top: -30px; }
-.icon-circle { width: 55px; height: 55px; border-radius: 18px; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; }
+.icon-circle { width: 55px; height: 55px; border-radius: 18px; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 26px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 
-.ayah-card { background: white; margin: 10px; padding: 15px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-.marker { background: #ffd700; font-size: 12px; padding: 2px 8px; border-radius: 5px; margin-right: 5px; font-weight: bold; }
+.ayah-card { background: white; margin: 15px; padding: 20px; border-radius: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; }
+.marker { background: var(--gold); font-size: 12px; padding: 3px 10px; border-radius: 5px; font-weight: bold; }
+.ayah-num { color: var(--green); font-weight: bold; border: 1px solid #ddd; border-radius: 50%; padding: 2px 6px; font-size: 14px; }
 
-#audio-bar { position: fixed; bottom: 0; width: 100%; background: white; padding: 10px; border-top: 2px solid var(--green); }
-#sidebar { position: fixed; top: 0; left: 0; width: 80%; height: 100%; background: white; z-index: 200; overflow-y: auto; }
-.surah-item { padding: 15px; border-bottom: 1px solid #eee; }
+/* COMPASS */
+.compass-container { text-align: center; margin-top: 50px; }
+.compass { font-size: 150px; transition: transform 0.1s ease-out; display: inline-block; }
+
+#sidebar { position: fixed; top: 0; left: 0; width: 280px; height: 100%; background: white; z-index: 200; overflow-y: auto; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+#audio-player { position: fixed; bottom: 0; width: 100%; background: white; border-top: 3px solid var(--green); z-index: 300; padding: 5px; }
