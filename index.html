@@ -7,59 +7,67 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&family=Amiri&display=swap" rel="stylesheet">
 </head>
-<body class="light-theme">
-
+<body>
     <div id="app">
         <header class="main-header">
             <div class="user-profile">
                 <div class="avatar">IS</div>
-                <div>
-                    <p class="greeting">As-salamu alaykum</p>
-                    <h2 class="user-name">Mohammad Israr</h2>
-                </div>
+                <div><p class="greeting">As-salamu alaykum</p><h2 class="user-name">Mohammad Israr</h2></div>
             </div>
             <button class="notif-btn">🔔</button>
         </header>
 
-        <div id="dashboard" class="page">
+        <div id="dashboard-page" class="page">
             <div class="prayer-card-modern">
-                <div class="time-main">21:57</div>
-                <div class="prayer-row">
-                    <div class="p-item"><span>Fajr</span><p>5:25</p></div>
-                    <div class="p-item active"><span>Dzuhr</span><p>1:30</p></div>
-                    <div class="p-item"><span>Asr</span><p>4:45</p></div>
-                    <div class="p-item"><span>Maghrib</span><p>5:36</p></div>
-                    <div class="p-item"><span>Isha</span><p>7:45</p></div>
+                <div class="time-main" id="current-time">00:00</div>
+                <div class="prayer-row" id="prayer-list">
+                    <div class="p-item"><span>Fajr</span><p id="fajr">-</p></div>
+                    <div class="p-item"><span>Dzuhr</span><p id="dzuhr">-</p></div>
+                    <div class="p-item"><span>Asr</span><p id="asr">-</p></div>
+                    <div class="p-item"><span>Maghrib</span><p id="maghrib">-</p></div>
+                    <div class="p-item"><span>Isha</span><p id="isha">-</p></div>
                 </div>
             </div>
-
             <div class="quick-menu">
-                <div class="menu-card" onclick="openQuran()">📖<span>Quran</span></div>
-                <div class="menu-card">📅<span>Hijri</span></div>
-                <div class="menu-card" onclick="openQibla()">🕋<span>Qibla</span></div>
+                <div class="menu-card" onclick="showPage('quran-page')">📖<span>Quran</span></div>
+                <div class="menu-card">📅<span id="hijri-text">Hijri</span></div>
+                <div class="menu-card" onclick="showPage('qibla-page')">🕋<span>Qibla</span></div>
                 <div class="menu-card">📿<span>Tasbeeh</span></div>
             </div>
+        </div>
 
-            <div class="last-read-card">
-                <div class="lr-content">
-                    <span>Last Read</span>
-                    <h3>Al-Fatihah</h3>
-                    <p>Ayah no. 1</p>
-                    <button class="continue-btn">Continue →</button>
-                </div>
-                <img src="quran-icon.png" class="q-img">
+        <div id="quran-page" class="page hidden">
+            <div class="search-container"><input type="text" id="surahSearch" placeholder="Search Surah..."></div>
+            <div id="surah-list"></div>
+        </div>
+
+        <div id="reader-page" class="page hidden">
+            <div class="reader-header">
+                <button onclick="showPage('quran-page')">←</button>
+                <select id="reciter-select">
+                    <option value="ar.abdurrahmansudais">Sudais</option>
+                    <option value="ar.alafasy">Mishary</option>
+                </select>
+            </div>
+            <div id="ayah-container"></div>
+        </div>
+
+        <div id="qibla-page" class="page hidden">
+            <div class="compass-box">
+                <div id="compass-needle">🧭</div>
+                <p>Align with Kaaba</p>
             </div>
         </div>
 
         <nav class="bottom-nav">
-            <div class="nav-item active" onclick="showPage('dashboard')">🏠</div>
-            <div class="nav-item" onclick="openQuran()">📖</div>
-            <div class="nav-center"><div class="center-circle">🕋</div></div>
+            <div class="nav-item" onclick="showPage('dashboard-page')">🏠</div>
+            <div class="nav-item" onclick="showPage('quran-page')">📖</div>
+            <div class="nav-center" onclick="showPage('qibla-page')"><div class="center-circle">🕋</div></div>
             <div class="nav-item">📿</div>
             <div class="nav-item">⚙️</div>
         </nav>
     </div>
-
+    <div id="audio-bar" class="hidden"><audio id="main-audio" controls></audio></div>
     <script src="script.js"></script>
 </body>
 </html>
