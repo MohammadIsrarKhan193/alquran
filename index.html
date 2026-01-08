@@ -14,10 +14,9 @@
                 <div class="avatar">IS</div>
                 <div><p class="greeting">As-salamu alaykum</p><h2 class="user-name">Mohammad Israr</h2></div>
             </div>
-            <button class="notif-btn">🔔</button>
         </header>
 
-        <div id="dashboard-page" class="page">
+        <div id="page-home" class="page">
             <div class="prayer-card-modern">
                 <div class="time-main" id="current-time">00:00</div>
                 <div class="prayer-row">
@@ -29,51 +28,39 @@
                 </div>
             </div>
             <div class="quick-menu">
-                <div class="menu-card" onclick="showPage('quran-page')">📖<span>Quran</span></div>
-                <div class="menu-card" onclick="alert('Hijri Loading...')">📅<span id="hijri-text">Hijri</span></div>
-                <div class="menu-card" onclick="showPage('qibla-page')">🕋<span>Qibla</span></div>
-                <div class="menu-card" onclick="alert('Tasbeeh Loading...')">📿<span>Tasbeeh</span></div>
+                <div class="menu-card" onclick="showPage('page-quran')">📖<span>Quran</span></div>
+                <div class="menu-card" onclick="alert('Coming soon!')">📅<span>Hijri</span></div>
+                <div class="menu-card" onclick="showPage('page-qibla')">🕋<span>Qibla</span></div>
+                <div class="menu-card" onclick="alert('Coming soon!')">📿<span>Tasbeeh</span></div>
             </div>
         </div>
 
-        <div id="quran-page" class="page hidden">
-            <div class="search-box"><input type="text" id="surahSearch" placeholder="Search Surah..." onkeyup="filterSurahs()"></div>
+        <div id="page-quran" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Holy Qur'an</h2></div>
             <div id="surah-list"></div>
         </div>
 
-        <div id="reader-page" class="page hidden">
-            <div class="reader-header">
-                <button onclick="showPage('quran-page')" class="back-btn">←</button>
-                <select id="reciter-select" onchange="reloadSurah()">
-                    <option value="ar.abdurrahmansudais">Sheikh Sudais</option>
-                    <option value="ar.alafasy">Mishary Alafasy</option>
-                </select>
-            </div>
+        <div id="page-reader" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-quran')">←</button><h2 id="surah-title">Reading</h2></div>
             <div id="ayah-container"></div>
         </div>
 
-        <div id="qibla-page" class="page hidden">
-            <div class="qibla-container">
-                <div id="compass-needle" class="compass">🧭</div>
-                <h3>Kabul, AF</h3>
-                <p>109.2° west of north</p>
+        <div id="page-qibla" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Qibla Direction</h2></div>
+            <div class="compass-box">
+                <div id="compass-needle">🧭</div>
+                <p>Rotate your phone</p>
             </div>
         </div>
 
         <nav class="bottom-nav">
-            <div class="nav-item" onclick="showPage('dashboard-page')">🏠</div>
-            <div class="nav-item" onclick="showPage('quran-page')">📖</div>
-            <div class="nav-center" onclick="showPage('qibla-page')"><div class="center-circle">🕋</div></div>
+            <div class="nav-item" onclick="showPage('page-home')">🏠</div>
+            <div class="nav-item" onclick="showPage('page-quran')">📖</div>
+            <div class="nav-center" onclick="showPage('page-qibla')"><div class="center-circle">🕋</div></div>
             <div class="nav-item">📿</div>
-            <div class="nav-item" onclick="alert('Settings coming soon')">⚙️</div>
+            <div class="nav-item">⚙️</div>
         </nav>
     </div>
-
-    <div id="audio-player" class="hidden">
-        <audio id="main-audio" controls autoplay></audio>
-        <button onclick="closeAudio()" class="close-audio">×</button>
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>
