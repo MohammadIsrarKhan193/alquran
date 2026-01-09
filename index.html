@@ -13,22 +13,25 @@
             <header class="main-header">
                 <div class="user-profile"><div class="avatar">IS</div><div><p class="greeting">As-salamu alaykum</p><h2 class="user-name">Mohammad Israr</h2></div></div>
             </header>
+            
             <div class="prayer-card-modern">
                 <div class="time-main" id="current-time">00:00</div>
                 <div class="prayer-row">
-                    <div class="p-item"><span>Fajr</span><p id="fajr">-</p></div>
-                    <div class="p-item"><span>Dzuhr</span><p id="dzuhr">-</p></div>
-                    <div class="p-item"><span>Asr</span><p id="asr">-</p></div>
-                    <div class="p-item"><span>Maghrib</span><p id="maghrib">-</p></div>
-                    <div class="p-item"><span>Isha</span><p id="isha">-</p></div>
+                    <div class="p-item"><span>Fajr</span><p id="fajr">05:31</p></div>
+                    <div class="p-item"><span>Dzuhr</span><p id="dzuhr">12:00</p></div>
+                    <div class="p-item"><span>Asr</span><p id="asr">03:23</p></div>
+                    <div class="p-item"><span>Maghrib</span><p id="maghrib">05:01</p></div>
+                    <div class="p-item"><span>Isha</span><p id="isha">06:30</p></div>
                 </div>
             </div>
+
             <div class="quick-menu">
                 <div class="menu-card" onclick="showPage('page-quran')">📖<span>Quran</span></div>
                 <div class="menu-card" onclick="showPage('page-hijri')">📅<span>Hijri</span></div>
                 <div class="menu-card" onclick="showPage('page-qibla')">🕋<span>Qibla</span></div>
                 <div class="menu-card" onclick="showPage('page-tasbeeh')">📿<span>Tasbeeh</span></div>
             </div>
+
             <div style="padding: 0 20px;">
                 <h3>Saved Bookmarks</h3>
                 <div id="bookmarks-container"></div>
@@ -37,7 +40,6 @@
 
         <div id="page-quran" class="page hidden">
             <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Holy Qur'an</h2></div>
-            <div style="padding:10px;"><input type="text" id="surahSearch" placeholder="Search Surah..." onkeyup="filterSurahs()" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd;"></div>
             <div id="surah-list"></div>
         </div>
 
@@ -46,27 +48,41 @@
                 <button onclick="stopAudio(); showPage('page-quran')">←</button>
                 <h2 id="surah-title">Reading</h2>
             </div>
-            <div class="audio-panel" style="padding:10px; background:#fff;">
-                <select id="reciter-select" onchange="changeReciter()" style="width:100%; padding:8px; margin-bottom:5px;">
+            <div class="audio-panel-pro">
+                <select id="reciter-select" onchange="changeReciter()">
                     <option value="ar.alafasy">Mishary Rashid Alafasy</option>
-                    <option value="ar.abdurrahmansudais">Abdurrahman As-Sudais</option>
+                    <option value="ar.sudais">Abdurrahman As-Sudais</option>
                 </select>
-                <audio id="quran-player" controls style="width:100%;"></audio>
+                <audio id="quran-player" controls></audio>
             </div>
             <div id="ayah-container"></div>
         </div>
 
         <div id="page-hijri" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Hijri Date</h2></div>
-            <div id="hijri-display" class="ayah-card" style="text-align:center; font-size:24px; padding:40px;">Loading...</div>
+            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Islamic Calendar</h2></div>
+            <div class="pro-list">
+                <div class="pro-item"><span>27 Rajab</span><p>16 Jan, 2026</p></div>
+                <div class="pro-item"><span>1 Ramadan</span><p>18 Feb, 2026</p></div>
+                <div class="pro-item"><span>Eid ul Fitr</span><p>20 Mar, 2026</p></div>
+            </div>
+        </div>
+
+        <div id="page-qibla" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Qibla Direction</h2></div>
+            <div class="compass-wrapper">
+                <div class="compass-base" id="compass">
+                    <div class="kaaba-icon">🕋</div>
+                </div>
+                <p style="text-align:center; margin-top:20px; color:#666;">Rotate your phone</p>
+            </div>
         </div>
 
         <div id="page-tasbeeh" class="page hidden">
             <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Tasbeeh</h2></div>
-            <div style="text-align:center; padding:50px;">
-                <h1 id="t-count" style="font-size:80px; color:var(--emerald);">0</h1>
-                <button onclick="doCount()" class="tasbeeh-btn">TAP</button>
-                <br><button onclick="resetT()" style="margin-top:20px; border:none; background:none; color:red;">Reset</button>
+            <div class="tasbeeh-display">
+                <h1 id="t-count">0</h1>
+                <div class="tap-circle" onclick="doCount()">TAP</div>
+                <button onclick="resetT()" class="reset-btn">Reset</button>
             </div>
         </div>
 
