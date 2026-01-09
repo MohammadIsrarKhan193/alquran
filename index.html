@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al-Qur'an Pro</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&family=Amiri&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&family=Amiri&family=Lateef&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="font-uthmanic">
     <div id="app">
         <div id="page-home" class="page">
             <header class="main-header">
@@ -37,19 +37,22 @@
 
         <div id="page-quran" class="page hidden">
             <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Holy Qur'an</h2></div>
+            <div class="settings-bar">
+                <select id="font-select" onchange="changeFont()">
+                    <option value="font-uthmanic">Uthmanic</option>
+                    <option value="font-indopak">Indopak</option>
+                    <option value="font-tajweed">Mushaf Tajweed</option>
+                </select>
+            </div>
             <div id="surah-list"></div>
         </div>
 
         <div id="page-reader" class="page hidden">
-            <div class="header-simple">
-                <button onclick="stopAudio(); showPage('page-quran')">←</button>
-                <h2 id="surah-title">Reading</h2>
-            </div>
+            <div class="header-simple"><button onclick="stopAudio(); showPage('page-quran')">←</button><h2 id="surah-title">Reading</h2></div>
             <div class="audio-panel-pro">
-                <label style="font-size:12px; color:#666;">Select Reciter:</label>
                 <select id="reciter-select" onchange="changeReciter()">
                     <option value="ar.alafasy">Mishary Rashid Alafasy</option>
-                    <option value="ar.sudais">Abdurrahman As-Sudais</option>
+                    <option value="ar.abdurrahmansudais">Abdurrahman As-Sudais</option>
                     <option value="ar.mahermuaiqly">Maher Al-Muaiqly</option>
                     <option value="ar.minshawi">Mohamed Siddiq El-Minshawi</option>
                 </select>
@@ -59,27 +62,24 @@
         </div>
 
         <div id="page-hijri" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Islamic Calendar</h2></div>
-            <div class="pro-list">
-                <div class="pro-item"><span>27 Rajab</span><p>16 Jan, 2026</p></div>
-                <div class="pro-item"><span>1 Ramadan</span><p>18 Feb, 2026</p></div>
-                <div class="pro-item"><span>Eid ul Fitr</span><p>20 Mar, 2026</p></div>
-            </div>
+            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Islamic Events</h2></div>
+            <div id="hijri-list" class="pro-list-img"></div>
         </div>
 
         <div id="page-tasbeeh" class="page hidden">
             <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Tasbeeh</h2></div>
             <div class="tasbeeh-display">
-                <select id="dhikr-select" onchange="resetT()" style="margin-bottom:20px; padding:10px; border-radius:10px; width:80%;">
-                    <option value="Subhanallah">Subhanallah</option>
-                    <option value="Alhamdulillah">Alhamdulillah</option>
-                    <option value="Allahu Akbar">Allahu Akbar</option>
-                    <option value="La ilaha illallah">La ilaha illallah</option>
-                    <option value="Astaghfirullah">Astaghfirullah</option>
+                <select id="dhikr-select" onchange="resetT()" class="dhikr-dropdown">
+                    <option value="سُبْحَانَ ٱللَّٰهِ">سُبْحَانَ ٱللَّٰهِ (Subhanallah)</option>
+                    <option value="ٱلْحَمْدُ لِلَّٰهِ">ٱلْحَمْدُ لِلَّٰهِ (Alhamdulillah)</option>
+                    <option value="ٱللَّٰهُ أَكْبَرُ">ٱللَّٰهُ أَكْبَرُ (Allahu Akbar)</option>
+                    <option value="لَا إِلَٰهَ إِلَّا ٱللَّٰهُ">لَا إِلَٰهَ إِلَّا ٱللَّٰهُ</option>
+                    <option value="أَسْتَغْفِرُ ٱللَّٰهَ">أَسْتَغْفِرُ ٱللَّٰهَ (Astaghfirullah)</option>
                 </select>
+                <div class="dhikr-text-large" id="current-dhikr-display">سُبْحَانَ ٱللَّٰهِ</div>
                 <h1 id="t-count">0</h1>
                 <div class="tap-circle" onclick="doCount()">TAP</div>
-                <button onclick="resetT()" class="reset-btn">Reset Counter</button>
+                <button onclick="resetT()" class="reset-btn">Reset</button>
             </div>
         </div>
 
