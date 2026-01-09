@@ -12,16 +12,16 @@
         <div id="page-home" class="page">
             <div class="top-bar-premium">
                 <div class="user-info">
-                    <p class="date-hijri" id="hijri-today">Loading Date...</p>
+                    <p class="date-hijri" id="hijri-today">Loading Hijri...</p>
                     <h2 class="user-greeting">As-salamu alaykum</h2>
                 </div>
-                <div class="settings-btn">⚙️</div>
+                <div class="settings-btn" onclick="alert('MÎK Settings coming soon!')">⚙️</div>
             </div>
 
             <div class="hero-card">
                 <div class="next-prayer-label">Prayer Times Today</div>
                 <h1 id="current-time">00:00</h1>
-                <div class="prayer-row-premium" id="prayer-times-bar"></div>
+                <div class="prayer-row-premium" id="prayer-times-bar">Locating...</div>
             </div>
 
             <div class="feature-grid-pro">
@@ -55,19 +55,50 @@
                 <h2 id="surah-title-display">Reading</h2>
             </div>
             <div class="audio-panel-pro">
-                <select id="reciter-select" onchange="changeReciter()">
+                <select id="reciter-select" onchange="changeLanguage()">
                     <option value="ar.alafasy">Mishary Rashid Alafasy</option>
                     <option value="ar.abdurrahmansudais">Abdurrahman As-Sudais</option>
                     <option value="ar.mahermuaiqly">Maher Al Muaiqly</option>
                 </select>
-                <audio id="quran-player" controls></audio>
+                <select id="lang-select" onchange="changeLanguage()" style="margin-top:8px;">
+                    <option value="en.sahih">English (Sahih)</option>
+                    <option value="ps.abdulwali">Pashto (پښتو)</option>
+                    <option value="ur.ahmedali">Urdu (اردو)</option>
+                    <option value="fa.mousavigarmaroudi">Dari (دری)</option>
+                    <option value="de.aburida">Deutsch (German)</option>
+                    <option value="fr.hamidullah">French (Français)</option>
+                    <option value="ta.tamil">Tamil (தமிழ்)</option>
+                    <option value="sd.amroti">Saraiki (سرائیکی)</option>
+                </select>
+                <audio id="quran-player" controls style="width:100%; margin-top:10px;"></audio>
             </div>
             <div id="ayah-content" class="ayah-container"></div>
         </div>
 
         <div id="page-prayers" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Adhan Alarms</h2></div>
-            <div id="prayer-settings-list" class="settings-list"></div>
+            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Adhan Settings</h2></div>
+            <div id="prayer-settings-list" class="settings-list">Allow GPS to see switches...</div>
+        </div>
+
+        <div id="page-tasbeeh" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Tasbeeh Counter</h2></div>
+            <div class="tasbeeh-body">
+                <select id="dhikr-select" onchange="resetT()">
+                    <option value="سُبْحَانَ اللَّهِ">Subhanallah</option>
+                    <option value="ٱلْحَمْدُ لِلَّٰهِ">Alhamdulillah</option>
+                    <option value="الله أكبر">Allahu Akbar</option>
+                </select>
+                <div class="tap-area" onclick="doCount()">
+                    <h1 id="t-count">0</h1>
+                    <p>TAP</p>
+                </div>
+                <button onclick="resetT()" class="reset-btn">Reset</button>
+            </div>
+        </div>
+
+        <div id="page-hijri" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Islamic Events</h2></div>
+            <div id="hijri-list" class="pro-list-img"></div>
         </div>
 
         <div id="page-qibla" class="page hidden">
@@ -76,27 +107,6 @@
                 <div class="compass-ring"><div id="qibla-needle" class="needle">🕋</div></div>
                 <p style="text-align:center; margin-top:30px; color:#666;">Rotate phone to find Kaaba</p>
             </div>
-        </div>
-
-        <div id="page-tasbeeh" class="page hidden">
-             <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Tasbeeh</h2></div>
-             <div class="tasbeeh-body">
-                 <select id="dhikr-select" onchange="resetT()">
-                     <option value="سُبْحَانَ اللَّهِ">سُبْحَانَ اللَّهِ</option>
-                     <option value="ٱلْحَمْدُ لِلَّٰهِ">ٱلْحَمْدُ لِلَّٰهِ</option>
-                     <option value="الله أكبر">الله أكبر</option>
-                 </select>
-                 <div class="tap-area" onclick="doCount()">
-                     <h1 id="t-count">0</h1>
-                     <p>TAP</p>
-                 </div>
-                 <button onclick="resetT()">Reset</button>
-             </div>
-        </div>
-
-        <div id="page-hijri" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Islamic Events</h2></div>
-            <div id="hijri-list" class="pro-list-img"></div>
         </div>
 
         <audio id="adhan-audio" src="https://www.islamcan.com/audio/adhan/azan1.mp3" preload="auto"></audio>
