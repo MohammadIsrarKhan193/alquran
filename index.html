@@ -30,41 +30,52 @@
                 <div class="menu-card" onclick="showPage('page-tasbeeh')">📿<span>Tasbeeh</span></div>
             </div>
             <div style="padding: 0 20px;">
-                <h3>Last Read</h3>
-                <div id="last-read-container"></div>
-                <h3 style="margin-top:20px;">Saved Bookmarks</h3>
-                <div id="bookmarks-container"><p style="color:#999; font-size:13px;">No bookmarks yet.</p></div>
+                <h3>Saved Bookmarks</h3>
+                <div id="bookmarks-container"></div>
             </div>
+        </div>
+
+        <div id="page-quran" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Holy Qur'an</h2></div>
+            <div style="padding:10px;"><input type="text" id="surahSearch" placeholder="Search Surah..." onkeyup="filterSurahs()" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd;"></div>
+            <div id="surah-list"></div>
         </div>
 
         <div id="page-reader" class="page hidden">
-            <div class="header-simple" style="flex-direction: column; align-items: flex-start; gap: 10px;">
-                <div style="display:flex; align-items:center; gap:20px; width:100%;">
-                    <button onclick="stopAudio(); showPage('page-quran')">←</button>
-                    <h2 id="surah-title" style="margin:0;">Reading</h2>
-                </div>
-                <div class="audio-panel">
-                    <select id="reciter-select" onchange="changeReciter()">
-                        <option value="ar.alafasy">Mishary Rashid Alafasy</option>
-                        <option value="ar.abdurrahmansudais">Abdurrahman As-Sudais</option>
-                        <option value="ar.mahermuaiqly">Maher Al Muaiqly</option>
-                    </select>
-                    <audio id="quran-player" controls style="height: 30px; width: 100%; margin-top:10px;"></audio>
-                </div>
+            <div class="header-simple">
+                <button onclick="stopAudio(); showPage('page-quran')">←</button>
+                <h2 id="surah-title">Reading</h2>
             </div>
-            <div id="ayah-container" style="padding-bottom: 100px;"></div>
+            <div class="audio-panel" style="padding:10px; background:#fff;">
+                <select id="reciter-select" onchange="changeReciter()" style="width:100%; padding:8px; margin-bottom:5px;">
+                    <option value="ar.alafasy">Mishary Rashid Alafasy</option>
+                    <option value="ar.abdurrahmansudais">Abdurrahman As-Sudais</option>
+                </select>
+                <audio id="quran-player" controls style="width:100%;"></audio>
+            </div>
+            <div id="ayah-container"></div>
         </div>
 
-        <div id="page-hijri" class="page hidden">...</div>
-        <div id="page-tasbeeh" class="page hidden">...</div>
-        <div id="page-qibla" class="page hidden">...</div>
+        <div id="page-hijri" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Hijri Date</h2></div>
+            <div id="hijri-display" class="ayah-card" style="text-align:center; font-size:24px; padding:40px;">Loading...</div>
+        </div>
+
+        <div id="page-tasbeeh" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Tasbeeh</h2></div>
+            <div style="text-align:center; padding:50px;">
+                <h1 id="t-count" style="font-size:80px; color:var(--emerald);">0</h1>
+                <button onclick="doCount()" class="tasbeeh-btn">TAP</button>
+                <br><button onclick="resetT()" style="margin-top:20px; border:none; background:none; color:red;">Reset</button>
+            </div>
+        </div>
 
         <nav class="bottom-nav">
             <div class="nav-item" onclick="showPage('page-home')">🏠</div>
             <div class="nav-item" onclick="showPage('page-quran')">📖</div>
             <div class="nav-center" onclick="showPage('page-qibla')"><div class="center-circle">🕋</div></div>
             <div class="nav-item" onclick="showPage('page-tasbeeh')">📿</div>
-            <div class="nav-item">⚙️</div>
+            <div class="nav-item" onclick="showPage('page-home')">⚙️</div>
         </nav>
     </div>
     <script src="script.js"></script>
