@@ -3,85 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Qur'an Pro</title>
+    <title>Al-Qur'an Pro - MÎK Edition</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Amiri&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="app">
         <div id="page-home" class="page">
-            <header class="main-header">
+            <div class="top-bar-premium">
                 <div class="user-info">
-                    <p class="date-hijri" id="date-hijri">Loading Hijri...</p>
-                    <h2 class="greeting">As-salamu alaykum</h2>
+                    <p class="date-hijri" id="hijri-today">Loading Hijri...</p>
+                    <h2 class="user-greeting">As-salamu alaykum</h2>
                 </div>
-            </header>
+                <div class="settings-icon">⚙️</div>
+            </div>
 
-            <div class="prayer-card-pro">
-                <div class="next-prayer">Upcoming: <span id="next-p-name">Loading...</span></div>
-                <div class="time-now" id="current-time">00:00</div>
-                <div class="prayer-grid" id="prayer-list">
+            <div class="hero-card">
+                <div class="next-prayer-label">Next Prayer: <span id="next-prayer-name">...</span></div>
+                <h1 id="current-time">00:00</h1>
+                <div class="prayer-row-premium" id="prayer-times-bar">
                     </div>
             </div>
 
-            <div class="feature-grid">
-                <div class="f-card" onclick="showPage('page-quran')">
-                    <div class="f-icon green-bg">📖</div>
+            <div class="feature-grid-pro">
+                <div class="f-item-pro" onclick="showPage('page-quran')">
+                    <div class="f-icon">📖</div>
                     <span>Al-Quran</span>
                 </div>
-                <div class="f-card" onclick="showPage('page-qibla')">
-                    <div class="f-icon gold-bg">🕋</div>
+                <div class="f-item-pro" onclick="showPage('page-qibla')">
+                    <div class="f-icon">🕋</div>
                     <span>Qibla</span>
                 </div>
-                <div class="f-card" onclick="showPage('page-tasbeeh')">
-                    <div class="f-icon blue-bg">📿</div>
+                <div class="f-item-pro" onclick="showPage('page-tasbeeh')">
+                    <div class="f-icon">📿</div>
                     <span>Tasbeeh</span>
                 </div>
-                <div class="f-card" onclick="showPage('page-hijri')">
-                    <div class="f-icon red-bg">📅</div>
+                <div class="f-item-pro" onclick="showPage('page-hijri')">
+                    <div class="f-icon">📅</div>
                     <span>Calendar</span>
                 </div>
             </div>
-            
-            <div class="section-header">
-                <h3>Saved Bookmarks</h3>
-            </div>
-            <div id="bookmarks-container" class="horizontal-scroll"></div>
-        </div>
 
-        <div id="page-qibla" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Qibla Finder</h2></div>
-            <div class="compass-container">
-                <div class="compass-base" id="compass">
-                    <div class="needle" id="needle"></div>
-                    <div class="kaaba-marker">🕋</div>
+            <div class="last-read-card" id="last-read-box">
+                <div class="lr-info">
+                    <span>Last Read</span>
+                    <h3 id="lr-surah">Surah Al-Baqarah</h3>
+                    <p id="lr-ayah">Ayah No: 145</p>
                 </div>
-                <p id="qibla-degree">Calculating...</p>
+                <button class="resume-btn" onclick="resumeReading()">Resume</button>
             </div>
         </div>
 
         <div id="page-reader" class="page hidden">
-            <div class="reader-header">
-                <button onclick="stopAudio(); showPage('page-quran')">←</button>
-                <h2 id="surah-title">Surah</h2>
+            <div class="reader-header-pro">
+                <button onclick="stopAudio(); showPage('page-quran')" class="back-btn">←</button>
+                <h2 id="surah-title">Surah Name</h2>
             </div>
-            <div class="audio-panel">
+            <div class="audio-panel-pro">
                 <select id="reciter-select" onchange="changeReciter()">
                     <option value="ar.alafasy">Mishary Rashid Alafasy</option>
-                    <option value="ar.abdurrahmansudais">Abdurrahman Sudais</option>
-                    <option value="ar.mahermuaiqly">Maher Al-Muaiqly</option>
+                    <option value="ar.abdurrahmansudais">Abdurrahman As-Sudais</option>
+                    <option value="ar.mahermuaiqly">Maher Al Muaiqly</option>
+                    <option value="ar.minshawi">Mohamed Siddiq El-Minshawi</option>
                 </select>
                 <audio id="quran-player" controls></audio>
             </div>
             <div id="ayah-container"></div>
         </div>
 
-        <nav class="bottom-nav">
+        <div id="page-tasbeeh" class="page hidden">
+             <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Tasbeeh</h2></div>
+             <div class="tasbeeh-container">
+                 <select id="dhikr-select" onchange="resetT()">
+                     <option value="سُبْحَانَ اللَّهِ">سُبْحَانَ اللَّهِ</option>
+                     <option value="ٱلْحَمْدُ لِلَّٰهِ">ٱلْحَمْدُ لِلَّٰهِ</option>
+                     <option value="الله أكبر">الله أكبر</option>
+                     <option value="لَا إِلَٰهَ إِلَّا ٱللَّٰهُ">لَا إِلَٰهَ إِلَّا ٱللَّٰهُ</option>
+                     <option value="وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّ">وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّ</option>
+                 </select>
+                 <div class="counter-circle" onclick="doCount()">
+                     <h1 id="t-count">0</h1>
+                     <p>TAP</p>
+                 </div>
+                 <button onclick="resetT()" class="reset-btn">Reset</button>
+             </div>
+        </div>
+
+        <div id="page-qibla" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Qibla Finder</h2></div>
+            <div class="compass-box">
+                <div id="compass-pointer" class="pointer">🕋</div>
+            </div>
+            <p class="qibla-text">Rotate your phone to find Kaaba</p>
+        </div>
+
+        <nav class="bottom-nav-premium">
             <div class="nav-item" onclick="showPage('page-home')">🏠</div>
             <div class="nav-item" onclick="showPage('page-quran')">📖</div>
-            <div class="nav-center" onclick="showPage('page-qibla')">🕋</div>
+            <div class="nav-item-center" onclick="showPage('page-qibla')">🕋</div>
             <div class="nav-item" onclick="showPage('page-tasbeeh')">📿</div>
-            <div class="nav-item">⚙️</div>
+            <div class="nav-item" onclick="showPage('page-hijri')">📅</div>
         </nav>
     </div>
     <script src="script.js"></script>
