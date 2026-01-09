@@ -1,31 +1,82 @@
-:root { --emerald: #145D4B; --light: #F8FAF9; }
-body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--light); }
-.hidden { display: none !important; }
+:root {
+    --emerald-primary: #145D4B;
+    --emerald-light: #E8F5E9;
+    --gold-accent: #FFD700;
+    --text-main: #333;
+    --bg-app: #F4F7F6;
+}
 
-/* Font Styles */
-.font-uthmanic .arabic-font { font-family: 'Amiri', serif; }
-.font-indopak .arabic-font { font-family: 'Lateef', cursive; font-size: 35px; }
-.font-tajweed .arabic-font { color: #2e7d32; font-family: 'Amiri', serif; }
+body { 
+    margin: 0; 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    background: var(--bg-app); 
+    color: var(--text-main);
+}
 
-.settings-bar { padding: 10px 20px; background: white; border-bottom: 1px solid #eee; }
-.settings-bar select { padding: 8px; border-radius: 8px; width: 100%; border: 1px solid #ddd; }
+/* Dashboard Premium Card */
+.prayer-card-premium {
+    background: linear-gradient(135deg, #1B5E20, #145D4B);
+    margin: 15px;
+    padding: 20px;
+    border-radius: 25px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(20,93,75,0.2);
+}
 
-/* Hijri List with Pics */
-.pro-list-img { padding: 15px; }
-.event-card { display: flex; align-items: center; background: white; padding: 15px; border-radius: 18px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
-.event-img { width: 60px; height: 60px; border-radius: 50%; margin-right: 15px; object-fit: cover; }
-.event-info h4 { margin: 0; color: var(--emerald); }
-.event-info p { margin: 0; font-size: 13px; color: #666; }
+.time-large { font-size: 48px; font-weight: bold; margin: 10px 0; }
 
-/* Tasbeeh Arabic Display */
-.dhikr-dropdown { width: 85%; padding: 12px; border-radius: 12px; border: 2px solid var(--emerald); margin-bottom: 20px; font-weight: bold; }
-.dhikr-text-large { font-family: 'Amiri', serif; font-size: 32px; color: var(--emerald); margin-top: 20px; }
+/* Grid Menu from Screenshot */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 15px;
+}
 
-/* Existing Styles (Keep from previous) */
-.main-header { padding: 40px 20px 20px; background: white; }
-.prayer-card-modern { background: var(--emerald); margin: 20px; padding: 25px; border-radius: 24px; color: white; text-align: center; }
-.quick-menu { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 20px; }
-.menu-card { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; font-size: 11px; font-weight: 600; }
-.bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; }
-.center-circle { width: 60px; height: 60px; background: var(--emerald); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-top: -30px; border: 5px solid var(--light); }
-.tap-circle { width: 150px; height: 150px; background: var(--emerald); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 30px auto; box-shadow: 0 10px 20px rgba(20,93,75,0.3); }
+.feature-item {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.feature-item img { width: 50px; margin-bottom: 10px; }
+.feature-item span { display: block; font-weight: 600; font-size: 14px; }
+
+/* Reciter & Font Selectors */
+.selection-chip-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+    gap: 10px;
+}
+
+.chip {
+    padding: 8px 15px;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+.chip.active {
+    background: var(--emerald-primary);
+    color: white;
+    border-color: var(--emerald-primary);
+}
+
+/* Audio Player Bottom Bar */
+.audio-sticky {
+    position: fixed;
+    bottom: 70px;
+    width: 100%;
+    background: white;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
