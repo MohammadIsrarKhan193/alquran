@@ -19,9 +19,10 @@
             </div>
 
             <div class="hero-card">
-                <div class="next-prayer-label">Next Prayer: <span id="next-prayer-name">...</span></div>
+                <div class="next-prayer-label">Prayer Times Today</div>
                 <h1 id="current-time">00:00</h1>
-                <div class="prayer-row-premium" id="prayer-times-bar"></div>
+                <div class="prayer-row-premium" id="prayer-times-bar">
+                    </div>
             </div>
 
             <div class="feature-grid-pro">
@@ -83,11 +84,10 @@
              <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Tasbeeh</h2></div>
              <div class="tasbeeh-body">
                  <select id="dhikr-select" onchange="resetT()">
-                     <option value="سُبْحَانَ اللَّهِ">سُبْحَانَ اللَّهِ (Subhanallah)</option>
-                     <option value="ٱلْحَمْدُ لِلَّٰهِ">ٱلْحَمْدُ لِلَّٰهِ (Alhamdulillah)</option>
-                     <option value="الله أكبر">الله أكبر (Allahu Akbar)</option>
+                     <option value="سُبْحَانَ اللَّهِ">سُبْحَانَ اللَّهِ</option>
+                     <option value="ٱلْحَمْدُ لِلَّٰهِ">ٱلْحَمْدُ لِلَّٰهِ</option>
+                     <option value="الله أكبر">الله أكبر</option>
                      <option value="لَا إِلَٰهَ إِلَّا ٱللَّٰهُ">لَا إِلَٰهَ إِلَّا ٱللَّٰهُ</option>
-                     <option value="وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّ">وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّ</option>
                  </select>
                  <div class="tap-area" onclick="doCount()">
                      <h1 id="t-count">0</h1>
