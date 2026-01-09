@@ -13,25 +13,22 @@
             <header class="main-header">
                 <div class="user-profile"><div class="avatar">IS</div><div><p class="greeting">As-salamu alaykum</p><h2 class="user-name">Mohammad Israr</h2></div></div>
             </header>
-            
             <div class="prayer-card-modern">
                 <div class="time-main" id="current-time">00:00</div>
                 <div class="prayer-row">
-                    <div class="p-item"><span>Fajr</span><p id="fajr">05:31</p></div>
-                    <div class="p-item"><span>Dzuhr</span><p id="dzuhr">12:00</p></div>
-                    <div class="p-item"><span>Asr</span><p id="asr">03:23</p></div>
-                    <div class="p-item"><span>Maghrib</span><p id="maghrib">05:01</p></div>
-                    <div class="p-item"><span>Isha</span><p id="isha">06:30</p></div>
+                    <div class="p-item"><span>Fajr</span><p>05:31</p></div>
+                    <div class="p-item"><span>Dzuhr</span><p>12:00</p></div>
+                    <div class="p-item"><span>Asr</span><p>03:23</p></div>
+                    <div class="p-item"><span>Maghrib</span><p>05:01</p></div>
+                    <div class="p-item"><span>Isha</span><p>06:30</p></div>
                 </div>
             </div>
-
             <div class="quick-menu">
                 <div class="menu-card" onclick="showPage('page-quran')">📖<span>Quran</span></div>
                 <div class="menu-card" onclick="showPage('page-hijri')">📅<span>Hijri</span></div>
                 <div class="menu-card" onclick="showPage('page-qibla')">🕋<span>Qibla</span></div>
                 <div class="menu-card" onclick="showPage('page-tasbeeh')">📿<span>Tasbeeh</span></div>
             </div>
-
             <div style="padding: 0 20px;">
                 <h3>Saved Bookmarks</h3>
                 <div id="bookmarks-container"></div>
@@ -49,9 +46,12 @@
                 <h2 id="surah-title">Reading</h2>
             </div>
             <div class="audio-panel-pro">
+                <label style="font-size:12px; color:#666;">Select Reciter:</label>
                 <select id="reciter-select" onchange="changeReciter()">
                     <option value="ar.alafasy">Mishary Rashid Alafasy</option>
                     <option value="ar.sudais">Abdurrahman As-Sudais</option>
+                    <option value="ar.mahermuaiqly">Maher Al-Muaiqly</option>
+                    <option value="ar.minshawi">Mohamed Siddiq El-Minshawi</option>
                 </select>
                 <audio id="quran-player" controls></audio>
             </div>
@@ -67,22 +67,19 @@
             </div>
         </div>
 
-        <div id="page-qibla" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Qibla Direction</h2></div>
-            <div class="compass-wrapper">
-                <div class="compass-base" id="compass">
-                    <div class="kaaba-icon">🕋</div>
-                </div>
-                <p style="text-align:center; margin-top:20px; color:#666;">Rotate your phone</p>
-            </div>
-        </div>
-
         <div id="page-tasbeeh" class="page hidden">
             <div class="header-simple"><button onclick="showPage('page-home')">←</button><h2>Tasbeeh</h2></div>
             <div class="tasbeeh-display">
+                <select id="dhikr-select" onchange="resetT()" style="margin-bottom:20px; padding:10px; border-radius:10px; width:80%;">
+                    <option value="Subhanallah">Subhanallah</option>
+                    <option value="Alhamdulillah">Alhamdulillah</option>
+                    <option value="Allahu Akbar">Allahu Akbar</option>
+                    <option value="La ilaha illallah">La ilaha illallah</option>
+                    <option value="Astaghfirullah">Astaghfirullah</option>
+                </select>
                 <h1 id="t-count">0</h1>
                 <div class="tap-circle" onclick="doCount()">TAP</div>
-                <button onclick="resetT()" class="reset-btn">Reset</button>
+                <button onclick="resetT()" class="reset-btn">Reset Counter</button>
             </div>
         </div>
 
