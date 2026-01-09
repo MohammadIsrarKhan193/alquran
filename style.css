@@ -1,49 +1,43 @@
 :root {
-    --emerald: #145D4B;
-    --dark-emerald: #0D3D32;
-    --bg: #F4F7F6;
+    --primary: #0A4D3C;
+    --accent: #FFD700;
+    --bg: #F8FBF9;
 }
 
-body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); }
+body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #333; overflow-x: hidden; }
 .hidden { display: none !important; }
 
-/* Header & Card */
-.main-header { padding: 30px 20px; background: white; border-radius: 0 0 30px 30px; }
+/* Header */
+.main-header { padding: 40px 20px; background: white; border-radius: 0 0 30px 30px; }
+.date-hijri { color: #888; margin: 0; font-size: 14px; }
+.greeting { margin: 5px 0 0; color: var(--primary); }
+
+/* Prayer Card (Screenshot Match) */
 .prayer-card-pro {
-    background: linear-gradient(135deg, var(--emerald), var(--dark-emerald));
+    background: linear-gradient(135deg, #0A4D3C, #1B5E20);
     margin: -40px 20px 20px;
     padding: 25px;
     border-radius: 25px;
     color: white;
-    box-shadow: 0 10px 20px rgba(20, 93, 75, 0.2);
+    box-shadow: 0 10px 20px rgba(10, 77, 60, 0.2);
+    text-align: center;
 }
-.time-now { font-size: 45px; font-weight: bold; text-align: center; margin: 10px 0; }
-.prayer-grid { display: flex; justify-content: space-between; font-size: 11px; margin-top: 15px; }
+.time-now { font-size: 48px; font-weight: 700; margin: 10px 0; }
+.prayer-grid { display: flex; justify-content: space-between; margin-top: 20px; font-size: 11px; }
 
-/* Grid Features */
+/* Feature Grid */
 .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-.f-card { 
-    background: white; padding: 25px; border-radius: 20px; 
-    text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
-}
-.f-card .icon { font-size: 30px; margin-bottom: 10px; }
-.f-card span { font-weight: 600; font-size: 14px; color: #333; }
+.f-card { background: white; padding: 20px; border-radius: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); cursor: pointer; }
+.f-icon { width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px; }
+.green-bg { background: #E8F5E9; } .gold-bg { background: #FFF9C4; } .blue-bg { background: #E3F2FD; } .red-bg { background: #FFEBEE; }
+.f-card span { font-weight: 600; font-size: 14px; }
 
-/* Reader Styles */
-.reader-header { display: flex; align-items: center; padding: 20px; background: white; sticky: top; }
-.reciter-bar { padding: 15px; background: white; border-bottom: 1px solid #eee; }
-.reciter-bar select { width: 100%; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
-.reciter-bar audio { width: 100%; height: 35px; }
+/* Qibla Compass */
+.compass-container { text-align: center; padding-top: 50px; }
+.compass-base { width: 280px; height: 280px; border: 10px solid white; border-radius: 50%; margin: 0 auto; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.needle { width: 4px; height: 100px; background: red; position: absolute; top: 40px; left: 138px; transform-origin: bottom; border-radius: 5px; }
+.kaaba-marker { position: absolute; top: 10px; left: 125px; font-size: 30px; }
 
-/* Bottom Bar */
-.bottom-nav { 
-    position: fixed; bottom: 0; width: 100%; background: white; 
-    display: flex; justify-content: space-around; align-items: center; 
-    padding: 15px 0; border-radius: 25px 25px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); 
-}
-.nav-center { 
-    width: 60px; height: 60px; background: var(--emerald); 
-    border-radius: 50%; color: white; display: flex; 
-    align-items: center; justify-content: center; font-size: 24px; 
-    margin-top: -40px; border: 5px solid var(--bg);
-}
+/* Bottom Nav */
+.bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
+.nav-center { width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -40px; border: 5px solid var(--bg); color: white; font-size: 24px; }
