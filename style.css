@@ -1,82 +1,49 @@
 :root {
-    --emerald-primary: #145D4B;
-    --emerald-light: #E8F5E9;
-    --gold-accent: #FFD700;
-    --text-main: #333;
-    --bg-app: #F4F7F6;
+    --emerald: #145D4B;
+    --dark-emerald: #0D3D32;
+    --bg: #F4F7F6;
 }
 
-body { 
-    margin: 0; 
-    font-family: 'Plus Jakarta Sans', sans-serif; 
-    background: var(--bg-app); 
-    color: var(--text-main);
-}
+body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); }
+.hidden { display: none !important; }
 
-/* Dashboard Premium Card */
-.prayer-card-premium {
-    background: linear-gradient(135deg, #1B5E20, #145D4B);
-    margin: 15px;
-    padding: 20px;
+/* Header & Card */
+.main-header { padding: 30px 20px; background: white; border-radius: 0 0 30px 30px; }
+.prayer-card-pro {
+    background: linear-gradient(135deg, var(--emerald), var(--dark-emerald));
+    margin: -40px 20px 20px;
+    padding: 25px;
     border-radius: 25px;
     color: white;
-    text-align: center;
-    box-shadow: 0 10px 20px rgba(20,93,75,0.2);
+    box-shadow: 0 10px 20px rgba(20, 93, 75, 0.2);
 }
+.time-now { font-size: 45px; font-weight: bold; text-align: center; margin: 10px 0; }
+.prayer-grid { display: flex; justify-content: space-between; font-size: 11px; margin-top: 15px; }
 
-.time-large { font-size: 48px; font-weight: bold; margin: 10px 0; }
-
-/* Grid Menu from Screenshot */
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    padding: 15px;
+/* Grid Features */
+.feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+.f-card { 
+    background: white; padding: 25px; border-radius: 20px; 
+    text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
 }
+.f-card .icon { font-size: 30px; margin-bottom: 10px; }
+.f-card span { font-weight: 600; font-size: 14px; color: #333; }
 
-.feature-item {
-    background: white;
-    padding: 20px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transition: transform 0.2s;
+/* Reader Styles */
+.reader-header { display: flex; align-items: center; padding: 20px; background: white; sticky: top; }
+.reciter-bar { padding: 15px; background: white; border-bottom: 1px solid #eee; }
+.reciter-bar select { width: 100%; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+.reciter-bar audio { width: 100%; height: 35px; }
+
+/* Bottom Bar */
+.bottom-nav { 
+    position: fixed; bottom: 0; width: 100%; background: white; 
+    display: flex; justify-content: space-around; align-items: center; 
+    padding: 15px 0; border-radius: 25px 25px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); 
 }
-
-.feature-item img { width: 50px; margin-bottom: 10px; }
-.feature-item span { display: block; font-weight: 600; font-size: 14px; }
-
-/* Reciter & Font Selectors */
-.selection-chip-container {
-    display: flex;
-    overflow-x: auto;
-    padding: 10px;
-    gap: 10px;
-}
-
-.chip {
-    padding: 8px 15px;
-    background: white;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    white-space: nowrap;
-}
-
-.chip.active {
-    background: var(--emerald-primary);
-    color: white;
-    border-color: var(--emerald-primary);
-}
-
-/* Audio Player Bottom Bar */
-.audio-sticky {
-    position: fixed;
-    bottom: 70px;
-    width: 100%;
-    background: white;
-    padding: 15px;
-    border-top: 1px solid #eee;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.nav-center { 
+    width: 60px; height: 60px; background: var(--emerald); 
+    border-radius: 50%; color: white; display: flex; 
+    align-items: center; justify-content: center; font-size: 24px; 
+    margin-top: -40px; border: 5px solid var(--bg);
 }
