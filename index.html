@@ -15,7 +15,7 @@
                     <p class="date-hijri" id="hijri-today">Loading Hijri...</p>
                     <h2 class="user-greeting">As-salamu alaykum</h2>
                 </div>
-                <div class="settings-btn" onclick="alert('MÎK Settings coming soon!')">⚙️</div>
+                <div class="settings-btn">⚙️</div>
             </div>
 
             <div class="hero-card">
@@ -77,21 +77,14 @@
 
         <div id="page-prayers" class="page hidden">
             <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Adhan Settings</h2></div>
-            <div id="prayer-settings-list" class="settings-list">Allow GPS to see switches...</div>
+            <div id="prayer-settings-list" class="settings-list">Loading switches...</div>
         </div>
 
         <div id="page-tasbeeh" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Tasbeeh Counter</h2></div>
+            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Tasbeeh</h2></div>
             <div class="tasbeeh-body">
-                <select id="dhikr-select" onchange="resetT()">
-                    <option value="سُبْحَانَ اللَّهِ">Subhanallah</option>
-                    <option value="ٱلْحَمْدُ لِلَّٰهِ">Alhamdulillah</option>
-                    <option value="الله أكبر">Allahu Akbar</option>
-                </select>
-                <div class="tap-area" onclick="doCount()">
-                    <h1 id="t-count">0</h1>
-                    <p>TAP</p>
-                </div>
+                <select id="dhikr-select" onchange="resetT()"><option>Subhanallah</option><option>Alhamdulillah</option><option>Allahu Akbar</option></select>
+                <div class="tap-area" onclick="doCount()"><h1 id="t-count">0</h1><p>TAP</p></div>
                 <button onclick="resetT()" class="reset-btn">Reset</button>
             </div>
         </div>
@@ -103,10 +96,7 @@
 
         <div id="page-qibla" class="page hidden">
             <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Qibla Finder</h2></div>
-            <div class="compass-wrapper">
-                <div class="compass-ring"><div id="qibla-needle" class="needle">🕋</div></div>
-                <p style="text-align:center; margin-top:30px; color:#666;">Rotate phone to find Kaaba</p>
-            </div>
+            <div class="compass-wrapper"><div class="compass-ring"><div id="qibla-needle" class="needle">🕋</div></div></div>
         </div>
 
         <audio id="adhan-audio" src="https://www.islamcan.com/audio/adhan/azan1.mp3" preload="auto"></audio>
