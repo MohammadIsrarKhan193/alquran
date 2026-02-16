@@ -1,17 +1,59 @@
 const CORRECT_BISMILLAH = "بِسْمِ ٱللهِ ٱلرَّحْمَٰنِ ٱلرَّحِيْمِ";
 let adhanSettings = JSON.parse(localStorage.getItem("adhanSettings")) || { Fajr: true, Dhuhr: true, Asr: true, Maghrib: true, Isha: true };
 let curSurah = 1, curName = "Al-Fatihah";
+let allSurahs = [];
 
 function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
     if (id === 'page-hijri') loadHijri();
+    if (id === 'page-home') updateLastReadUI();
     window.scrollTo(0,0);
 }
 
-// Fixed Language Loading Logic
+// Memory: Save Last Read
+function saveLastRead(num, name) {
+    localStorage.setItem("lastReadNum", num);
+    localStorage.setItem("lastReadName", name);
+}
+
+function updateLastReadUI() {
+    const name = localStorage.getItem("lastReadName");
+    if(name) {
+        document.getElementById('last-read-name').innerText = name;
+        document.getElementById('last-read-container').style.display = "block";
+    } else {
+        document.getElementById('last-read-container').style.display = "none";
+    }
+}
+
+function resumeReading() {
+    const num = localStorage.getItem("lastReadNum");
+    const name = localStorage.getItem("lastReadName");
+    if(num) loadSurah(num, name);
+}
+
+// Search Logic
+function filterSurahs() {
+    const query = document.getElementById('surahSearch').value.toLowerCase();
+    const filtered = allSurahs.filter(s => 
+        s.englishName.toLowerCase().includes(query) || 
+        s.number.toString().includes(query)
+    );
+    renderSurahList(filtered);
+}
+
+function renderSurahList(list) {
+    document.getElementById('surah-list-container').innerHTML = list.map(s => `
+        <div class="f-item-pro" onclick="loadSurah(${s.number},'${s.englishName}')" style="display:flex; justify-content:space-between; width:90%; margin:10px auto;">
+            <span>${s.number}. ${s.englishName}</span><span class="arabic-font" style="font-size:18px; padding:0;">${s.name}</span>
+        </div>`).join('');
+}
+
+// Core Surah Loader
 async function loadSurah(num, name) {
     curSurah = num; curName = name;
+    saveLastRead(num, name);
     showPage('page-reader');
     document.getElementById('surah-title-display').innerText = name;
     
@@ -21,7 +63,6 @@ async function loadSurah(num, name) {
     
     player.src = `https://cdn.islamic.network/quran/audio-surah/128/${reciter}/${num}.mp3`;
     
-    // Fetch both Arabic and Translation together
     try {
         const res = await fetch(`https://api.alquran.cloud/v1/surah/${num}/editions/quran-uthmani,${lang}`);
         const data = await res.json();
@@ -43,9 +84,7 @@ async function loadSurah(num, name) {
 
 function changeLanguage() { loadSurah(curSurah, curName); }
 
-// Fixed GPS & Adhan Logic
-function toggleAdhan(p, val) { adhanSettings[p] = val; localStorage.setItem("adhanSettings", JSON.stringify(adhanSettings)); }
-
+// GPS & Adhan
 async function initGPS() {
     navigator.geolocation.getCurrentPosition(async (pos) => {
         const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&method=2`);
@@ -75,6 +114,7 @@ async function initGPS() {
     }, () => { document.getElementById('prayer-times-bar').innerHTML = "Enable GPS"; });
 }
 
+function toggleAdhan(p, val) { adhanSettings[p] = val; localStorage.setItem("adhanSettings", JSON.stringify(adhanSettings)); }
 let tCount = 0;
 function doCount() { tCount++; document.getElementById('t-count').innerText = tCount; if(navigator.vibrate) navigator.vibrate(50); }
 function resetT() { tCount = 0; document.getElementById('t-count').innerText = 0; }
@@ -93,14 +133,13 @@ window.addEventListener('deviceorientation', function(e) {
 
 window.onload = () => {
     initGPS();
+    updateLastReadUI();
     setInterval(() => {
         const d = new Date();
         document.getElementById('current-time').innerText = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
     }, 1000);
     fetch('https://api.alquran.cloud/v1/surah').then(res => res.json()).then(data => {
-        document.getElementById('surah-list-container').innerHTML = data.data.map(s => `
-            <div class="f-item-pro" onclick="loadSurah(${s.number},'${s.englishName}')" style="display:flex; justify-content:space-between; width:90%; margin:10px auto;">
-                <span>${s.number}. ${s.englishName}</span><span class="arabic-font" style="font-size:18px; padding:0;">${s.name}</span>
-            </div>`).join('');
+        allSurahs = data.data;
+        renderSurahList(allSurahs);
     });
 };
