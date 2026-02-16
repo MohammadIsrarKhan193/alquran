@@ -22,6 +22,10 @@
                 <div class="next-prayer-label">Prayer Times Today</div>
                 <h1 id="current-time">00:00</h1>
                 <div class="prayer-row-premium" id="prayer-times-bar">Locating...</div>
+                
+                <div id="last-read-container" class="last-read-mini" onclick="resumeReading()">
+                    <span>📖 Last Read: <b id="last-read-name">None</b></span>
+                </div>
             </div>
 
             <div class="feature-grid-pro">
@@ -45,7 +49,13 @@
         </div>
 
         <div id="page-quran-list" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Holy Quran</h2></div>
+            <div class="header-simple">
+                <button onclick="showPage('page-home')" class="back-btn">←</button>
+                <h2>Holy Quran</h2>
+            </div>
+            <div class="search-container">
+                <input type="text" id="surahSearch" placeholder="Search Surah (e.g. Al-Fatiha or 1)..." onkeyup="filterSurahs()">
+            </div>
             <div id="surah-list-container"></div>
         </div>
 
