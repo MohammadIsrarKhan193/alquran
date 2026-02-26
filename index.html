@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al-Qur'an Pro - MÎK Edition</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Amiri&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Amiri&family=Noto+Naskh+Arabic:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="app">
         <div id="page-home" class="page">
             <div class="top-bar-premium">
                 <div class="user-info">
-                    <p class="date-hijri" id="hijri-today">Loading Hijri...</p>
-                    <h2 class="user-greeting" id="city-display">As-salamu alaikum</h2>
+                    <p class="date-hijri" id="hijri-today">Loading...</p>
+                    <h2 class="user-greeting">As-salamu alaikum</h2>
                 </div>
-                <div class="top-btns">
-                    <button onclick="toggleDarkMode()" id="dark-mode-btn" style="border:none; background:none; font-size:20px; cursor:pointer;">🌙</button>
-                </div>
+                <button onclick="toggleDarkMode()" id="dark-mode-btn" class="icon-btn">🌙</button>
             </div>
 
             <div class="hero-card">
@@ -26,77 +24,72 @@
                 <div class="prayer-row-premium" id="prayer-times-bar">Locating...</div>
             </div>
 
-            <div class="event-card" id="hijri-events-card">
-                <div class="event-item">🌙 <span id="ramadan-countdown">Ramadan: Loading...</span></div>
-                <div class="event-item">🎁 <span id="eid-fitr-countdown">Eid al-Fitr: Loading...</span></div>
-                <div class="event-item">🕋 <span id="eid-adha-countdown">Eid al-Adha: Loading...</span></div>
-            </div>
-
-            <div id="last-read-container" class="last-read-mini" onclick="resumeReading()" style="display:none; margin: 0 20px 15px;">
-                <span>📖 Resume: <b id="last-read-name">None</b></span>
-            </div>
-
-            <div class="daily-verse-card" id="daily-verse-box">
-                <small>✨ Ayah of the Day</small>
-                <p class="ar-verse" id="daily-ar" style="font-family:'Amiri'; font-size: 20px;">...</p>
-                <p class="en-verse" id="daily-en">...</p>
+            <div class="event-card">
+                <div class="event-item">🌙 <span id="ramadan-countdown">Ramadan: ...</span></div>
+                <div class="event-item">🎁 <span id="eid-fitr-countdown">Eid al-Fitr: ...</span></div>
             </div>
 
             <div class="feature-grid-pro">
                 <div class="f-item-pro" onclick="showPage('page-quran-list')"><div class="f-icon">📖</div><span>Al-Quran</span></div>
-                <div class="f-item-pro" onclick="showPage('page-prayers')"><div class="f-icon">⏰</div><span>Adhan Alarms</span></div>
-                <div class="f-item-pro" onclick="showPage('page-names')"><div class="f-icon">✨</div><span>99 Names</span></div>
+                <div class="f-item-pro" onclick="showPage('page-prayers')"><div class="f-icon">⏰</div><span>Adhan</span></div>
+                <div class="f-item-pro" onclick="showPage('page-names')"><div class="f-icon">✨</div><span>99 Allah</span></div>
+                <div class="f-item-pro" onclick="showPage('page-names-prophet')"><div class="f-icon">💚</div><span>99 Prophet</span></div>
                 <div class="f-item-pro" onclick="showPage('page-tasbeeh')"><div class="f-icon">📿</div><span>Tasbeeh</span></div>
-                <div class="f-item-pro" onclick="showPage('page-duas')"><div class="f-icon">🤲🏻</div><span>Daily Duas</span></div>
-                <div class="f-item-pro" onclick="showPage('page-zakat')"><div class="f-icon">💰</div><span>Zakat Cal</span></div>
+                <div class="f-item-pro" onclick="showPage('page-zakat')"><div class="f-icon">💰</div><span>Zakat</span></div>
             </div>
         </div>
 
         <div id="page-quran-list" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Holy Quran</h2></div>
-            <div id="surah-list-container"></div>
+            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Al-Quran</h2></div>
+            <div id="surah-list-container" class="modern-list"></div>
         </div>
 
-        <div id="page-prayers" class="page hidden">
-            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Adhan Alarms</h2></div>
-            <div id="prayer-settings-list" class="settings-list" style="padding:20px;">Allow GPS to load switches...</div>
+        <div id="page-names" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>99 Names of Allah</h2></div>
+            <div id="names-container" class="names-grid"></div>
+        </div>
+
+        <div id="page-names-prophet" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Names of Muhammad ﷺ</h2></div>
+            <div id="prophet-names-container" class="names-grid"></div>
         </div>
 
         <div id="page-reader" class="page hidden">
             <div class="header-simple"><button onclick="stopAudio(); showPage('page-quran-list')" class="back-btn">←</button><h2 id="surah-title-display">Reading</h2></div>
-            <div class="audio-panel-pro" style="background:var(--card); padding:15px;">
-                <select id="reciter-select" onchange="changeLanguage()" style="width:100%; padding:10px; margin-bottom:10px;">
-                    <option value="ar.alafasy">Mishary Alafasy</option>
-                    <option value="ar.abdurrahmansudais">As-Sudais</option>
+            <div class="reader-controls">
+                <select id="lang-select" onchange="changeLanguage()">
+                    <option value="en.sahih">English</option>
+                    <option value="ps.abdulwali">Pashto</option>
+                    <option value="ur.ahmedali">Urdu</option>
+                    <option value="fa.mousavigarmaroudi">Dari</option>
                 </select>
-                <select id="lang-select" onchange="changeLanguage()" style="width:100%; padding:10px;">
-                    <option value="en.sahih">English (Sahih)</option>
-                    <option value="ps.abdulwali">Pashto (پښتو)</option>
-                    <option value="ur.ahmedali">Urdu (اردو)</option>
-                    <option value="fa.mousavigarmaroudi">Dari (دری)</option>
-                    <option value="de.aburida">Deutsch (German)</option>
-                    <option value="fr.hamidullah">French (Français)</option>
-                    <option value="ta.tamil">Tamil (தமிழ்)</option>
-                    <option value="sd.amroti">Saraiki (سرائیکی)</option>
-                </select>
-                <audio id="quran-player" controls style="width:100%; margin-top:10px;"></audio>
+                <audio id="quran-player" controls></audio>
             </div>
-            <div id="ayah-content" style="padding-bottom:100px;"></div>
+            <div id="ayah-content"></div>
         </div>
 
-        <div id="page-names" class="page hidden"><div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>99 Names</h2></div><div id="names-container" class="names-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:20px;"></div></div>
-        <div id="page-zakat" class="page hidden"><div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Zakat</h2></div><div class="zakat-form" style="padding:20px;"><input type="number" id="zakat-amount" placeholder="Savings..." style="width:80%; padding:10px; border-radius:10px; border:1px solid #ddd;"><button onclick="calculateZakat()" style="padding:10px; background:var(--emerald); color:white; border:none; border-radius:10px; margin-top:10px;">Calculate</button><div id="zakat-result" style="margin-top:20px; font-weight:700;"></div></div></div>
-        <div id="page-duas" class="page hidden"><div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Daily Duas</h2></div><div id="duas-container" style="padding:20px;"></div></div>
-        <div id="page-tasbeeh" class="page hidden"><div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Tasbeeh</h2></div><div class="tasbeeh-body" style="text-align:center; padding-top:50px;"><div onclick="doCount()" style="width:150px; height:150px; background:var(--emerald); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:auto; font-size:40px;"><h1 id="t-count">0</h1></div><button onclick="resetT()" style="margin-top:20px;">Reset</button></div></div>
+        <div id="page-prayers" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Adhan Settings</h2></div>
+            <div id="prayer-settings-list" class="settings-list"></div>
+        </div>
 
-        <audio id="adhan-audio" src="https://www.islamcan.com/audio/adhan/azan1.mp3" preload="auto"></audio>
+        <div id="page-tasbeeh" class="page hidden">
+            <div class="header-simple"><button onclick="showPage('page-home')" class="back-btn">←</button><h2>Tasbeeh</h2></div>
+            <div class="tasbeeh-container">
+                <div class="counter-display" id="t-count">0</div>
+                <div class="tap-circle" onclick="doCount()">TAP</div>
+                <button onclick="resetT()" class="reset-btn">Reset</button>
+            </div>
+        </div>
 
-        <nav class="bottom-nav-premium">
-            <div class="nav-item" onclick="showPage('page-home')">🏠</div>
-            <div class="nav-item" onclick="showPage('page-quran-list')">📖</div>
-            <div class="nav-item" onclick="showPage('page-prayers')">⏰</div>
-            <div class="nav-item" onclick="showPage('page-tasbeeh')">📿</div>
-            <div class="nav-item" onclick="showPage('page-names')">✨</div>
+        <audio id="adhan-audio" src="https://www.islamcan.com/audio/adhan/azan1.mp3"></audio>
+
+        <nav class="bottom-nav">
+            <div onclick="showPage('page-home')">🏠</div>
+            <div onclick="showPage('page-quran-list')">📖</div>
+            <div class="nav-center" onclick="showPage('page-home')">🕋</div>
+            <div onclick="showPage('page-tasbeeh')">📿</div>
+            <div onclick="showPage('page-prayers')">⏰</div>
         </nav>
     </div>
     <script src="script.js"></script>
