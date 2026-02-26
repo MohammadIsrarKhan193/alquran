@@ -1,27 +1,35 @@
-:root { --emerald: #145D4B; --gold: #FFD700; --bg: #F8FAF9; --card: #ffffff; --text: #222222; }
-body.dark-mode { --bg: #121212; --card: #1e1e1e; --text: #f0f0f0; }
-body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; }
+:root { --emerald: #145D4B; --soft-emerald: #E8F2F0; --gold: #D4AF37; --bg: #F8FAF9; --card: #ffffff; --text: #222222; }
+body.dark-mode { --bg: #0F1715; --card: #1A2421; --text: #E0E0E0; --soft-emerald: #1F2B28; }
+
+body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); }
 .hidden { display: none !important; }
 
-/* Home Components */
-.top-bar-premium { padding: 40px 20px 20px; background: var(--card); display: flex; justify-content: space-between; align-items: center; }
-.hero-card { background: linear-gradient(135deg, var(--emerald), #1b7a63); margin: 20px; padding: 25px; border-radius: 30px; color: white; text-align: center; }
-.prayer-row-premium { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-top: 15px; font-size: 10px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; }
+/* Dashboard UI */
+.top-bar-premium { padding: 40px 20px 20px; background: var(--card); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--soft-emerald); }
+.hero-card { background: linear-gradient(135deg, #145D4B, #1b7a63); margin: 20px; padding: 25px; border-radius: 25px; color: white; text-align: center; box-shadow: 0 10px 20px rgba(20,93,75,0.2); }
+.prayer-row-premium { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-top: 20px; font-size: 10px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; }
 
-/* Adhan Switch Styles */
-.prayer-setting-item { background: var(--card); display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-.switch { position: relative; display: inline-block; width: 40px; height: 20px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
-.slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background-color: var(--emerald); }
-input:checked + .slider:before { transform: translateX(20px); }
+/* Modern Surah List (SS Design) */
+.modern-list { padding: 15px; padding-bottom: 100px; }
+.surah-card { background: var(--card); display: flex; align-items: center; padding: 15px; border-radius: 15px; margin-bottom: 12px; border-bottom: 1px solid var(--soft-emerald); cursor: pointer; transition: 0.2s; }
+.surah-card:active { transform: scale(0.98); background: var(--soft-emerald); }
+.surah-num-star { width: 40px; height: 40px; background: var(--soft-emerald); color: var(--emerald); display: flex; align-items: center; justify-content: center; font-weight: 700; border-radius: 10px; margin-right: 15px; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+.surah-info { flex-grow: 1; }
+.surah-info h4 { margin: 0; font-size: 16px; }
+.surah-info p { margin: 0; font-size: 12px; color: #777; }
+.surah-arabic { font-family: 'Amiri', serif; font-size: 20px; color: var(--emerald); font-weight: bold; }
 
-/* Grid */
-.feature-grid-pro { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; margin-bottom: 100px; }
-.f-item-pro { background: var(--card); padding: 20px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.03); cursor: pointer; }
-.event-card { background: var(--card); margin: 0 20px 20px; padding: 20px; border-radius: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-.daily-verse-card { background: var(--card); margin: 0 20px 20px; padding: 20px; border-radius: 20px; text-align: center; border: 1px solid #eee; }
+/* Names Grid (SS Design) */
+.names-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 15px; padding-bottom: 100px; }
+.name-card { background: var(--card); border: 1px solid var(--soft-emerald); border-radius: 15px; padding: 15px; text-align: center; transition: 0.3s; }
+.name-card .ar { font-family: 'Noto Naskh Arabic'; font-size: 18px; color: var(--emerald); display: block; margin-bottom: 5px; }
+.name-card .en { font-size: 11px; font-weight: 600; color: var(--text); }
 
-/* Bottom Nav */
-.bottom-nav-premium { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 15px 0; border-radius: 25px 25px 0 0; box-shadow: 0 -5px 10px rgba(0,0,0,0.05); }
+/* Tasbeeh */
+.tasbeeh-container { text-align: center; padding: 40px 20px; }
+.counter-display { font-size: 80px; font-weight: 800; color: var(--emerald); margin-bottom: 30px; }
+.tap-circle { width: 180px; height: 180px; background: var(--emerald); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: auto; font-size: 24px; font-weight: 700; box-shadow: 0 10px 30px rgba(20,93,75,0.3); cursor: pointer; }
+
+/* Navigation */
+.bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 15px 0; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1000; }
+.nav-center { background: var(--emerald); color: white; width: 55px; height: 55px; border-radius: 50%; margin-top: -35px; display: flex; align-items: center; justify-content: center; border: 5px solid var(--bg); }
