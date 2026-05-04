@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Al-Qur'an Pro — MÎK Edition</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- SPLASH -->
+  <div id="splash" class="splash-screen">
+    <div class="s-orb s-orb1"></div><div class="s-orb s-orb2"></div><div class="s-orb s-orb3"></div>
+    <div class="s-grid"></div>
+    <div class="s-content">
+      <div class="s-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+      <div class="s-logo"><div class="s-ring r1"></div><div class="s-ring r2"></div><div class="s-icon">☽</div></div>
+      <h1 class="s-title">Al-Qur'an Pro</h1>
+      <p class="s-edition">MÎK Edition</p>
+      <div class="s-bar"><div class="s-fill"></div></div>
+      <p class="s-verse">"Indeed, it is We who sent down the Qur'an and indeed, We will be its guardian." — 15:9</p>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="page-home" class="page hidden">
+    <div class="bg-orb o1"></div><div class="bg-orb o2"></div>
+    <div class="home-scroll">
+      <div class="top-bar">
+        <div><div class="hijri-lbl" id="hijri-today">—</div><div class="greeting">As-salāmu ʿalaykum 🌙</div></div>
+        <div class="top-actions">
+          <button class="ico-btn" onclick="showPage('page-bookmarks')">🔖</button>
+          <button class="ico-btn" id="theme-btn" onclick="toggleTheme()">☀️</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-pat"></div>
+        <div class="hero-r1"><span class="hero-lbl">Next Prayer</span><span class="hero-pname" id="next-prayer-name">—</span></div>
+        <div class="hero-clock" id="current-time">00:00</div>
+        <div class="hero-sub" id="next-prayer-time">Locating...</div>
+        <div class="ppills">
+          <div class="ppill"><span>Fajr</span><b id="p-fajr">--:--</b></div>
+          <div class="ppill"><span>Dhuhr</span><b id="p-dhuhr">--:--</b></div>
+          <div class="ppill"><span>Asr</span><b id="p-asr">--:--</b></div>
+          <div class="ppill"><span>Maghrib</span><b id="p-maghrib">--:--</b></div>
+          <div class="ppill"><span>Isha</span><b id="p-isha">--:--</b></div>
+        </div>
+      </div>
+      <div class="chips-row">
+        <div class="chip">🌙 <span id="ramadan-txt">Ramadan: ...</span></div>
+        <div class="chip">🎁 <span id="eid-txt">Eid: ...</span></div>
+      </div>
+      <div id="last-read-wrap" class="hidden">
+        <div class="sec-hdr">Continue Reading</div>
+        <div class="lr-card" id="lr-card" onclick="continueReading()">
+          <div class="lr-ico">📖</div>
+          <div class="lr-info"><div class="lr-name" id="lr-name">—</div><div class="lr-sub" id="lr-sub">—</div></div>
+          <div class="lr-arr">›</div>
+        </div>
+      </div>
+      <div class="sec-hdr">Features</div>
+      <div class="feat-grid">
+        <div class="fc quran-fc" onclick="showPage('page-quran-list')"><div class="fc-ico">📖</div><div class="fc-ar">القرآن</div><div class="fc-nm">Al-Quran</div></div>
+        <div class="fc prayer-fc" onclick="showPage('page-prayers')"><div class="fc-ico">🕌</div><div class="fc-ar">الأذان</div><div class="fc-nm">Prayer Times</div></div>
+        <div class="fc names-fc" onclick="showPage('page-names')"><div class="fc-ico">✨</div><div class="fc-ar">أسماء الله</div><div class="fc-nm">99 Names Allah</div></div>
+        <div class="fc prophet-fc" onclick="showPage('page-names-prophet')"><div class="fc-ico">💚</div><div class="fc-ar">أسماء النبي</div><div class="fc-nm">99 Names Prophet ﷺ</div></div>
+        <div class="fc tasbeeh-fc" onclick="showPage('page-tasbeeh')"><div class="fc-ico">📿</div><div class="fc-ar">التسبيح</div><div class="fc-nm">Tasbeeh</div></div>
+        <div class="fc qibla-fc" onclick="showPage('page-qibla')"><div class="fc-ico">🧭</div><div class="fc-ar">القبلة</div><div class="fc-nm">Qibla</div></div>
+        <div class="fc tafsir-fc" onclick="showPage('page-tafsir-home')"><div class="fc-ico">📚</div><div class="fc-ar">التفسير</div><div class="fc-nm">Tafsir</div></div>
+        <div class="fc zakat-fc" onclick="showPage('page-zakat')"><div class="fc-ico">💰</div><div class="fc-ar">الزكاة</div><div class="fc-nm">Zakat</div></div>
+      </div>
+    </div>
+    <nav class="bnav">
+      <div class="ni active" onclick="setNav(this);showPage('page-home')"><div class="ni-ico">🏠</div><span>Home</span></div>
+      <div class="ni" onclick="setNav(this);showPage('page-quran-list')"><div class="ni-ico">📖</div><span>Quran</span></div>
+      <div class="nc" onclick="showPage('page-home')"><div class="nc-in">🕋</div></div>
+      <div class="ni" onclick="setNav(this);showPage('page-tasbeeh')"><div class="ni-ico">📿</div><span>Tasbeeh</span></div>
+      <div class="ni" onclick="setNav(this);showPage('page-prayers')"><div class="ni-ico">⏰</div><span>Prayer</span></div>
+    </nav>
+  </div>
+
+  <!-- QURAN LIST -->
+  <div id="page-quran-list" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">Al-Qur'an</h2><div class="par">القرآن الكريم</div></div>
+      <button class="ico-btn" onclick="toggleSearch()">🔍</button>
+    </div>
+    <div id="sbar" class="sbar hidden"><input id="sinput" type="text" placeholder="Search Surah..." oninput="filterSurahs()"/></div>
+    <div class="jtabs">
+      <button class="jtab active" onclick="setTab(this,'surah')">Surah</button>
+      <button class="jtab" onclick="setTab(this,'juz')">Juz</button>
+      <button class="jtab" onclick="setTab(this,'fav')">Favourites</button>
+    </div>
+    <div id="surah-list" class="surah-list"></div>
+    <nav class="bnav">
+      <div class="ni" onclick="setNav(this);showPage('page-home')"><div class="ni-ico">🏠</div><span>Home</span></div>
+      <div class="ni active" onclick="setNav(this);showPage('page-quran-list')"><div class="ni-ico">📖</div><span>Quran</span></div>
+      <div class="nc" onclick="showPage('page-home')"><div class="nc-in">🕋</div></div>
+      <div class="ni" onclick="setNav(this);showPage('page-tasbeeh')"><div class="ni-ico">📿</div><span>Tasbeeh</span></div>
+      <div class="ni" onclick="setNav(this);showPage('page-prayers')"><div class="ni-ico">⏰</div><span>Prayer</span></div>
+    </nav>
+  </div>
+
+  <!-- READER -->
+  <div id="page-reader" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="stopAudio();showPage('page-quran-list')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle" id="reader-title">Reading</h2><div class="par" id="reader-sub">—</div></div>
+      <button class="ico-btn" id="bm-btn" onclick="toggleBookmarkSurah()">🔖</button>
+    </div>
+    <div class="reader-bar">
+      <select id="lang-sel" class="sel" onchange="changeLang()">
+        <option value="en.sahih">English</option>
+        <option value="ps.abdulwali">Pashto</option>
+        <option value="ur.ahmedali">Urdu</option>
+        <option value="fa.mousavigarmaroudi">Dari</option>
+      </select>
+      <select id="reciter-sel" class="sel" onchange="changeReciter()">
+        <option value="ar.alafasy">Alafasy</option>
+        <option value="ar.abdurrahmaansudais">Sudais</option>
+        <option value="ar.husary">Husary</option>
+      </select>
+      <button class="fbtn" onclick="changeFontSize(-2)">A-</button>
+      <button class="fbtn" onclick="changeFontSize(2)">A+</button>
+      <button class="fbtn tafsir-toggle-btn" id="tafsir-mode-btn" onclick="toggleTafsirMode()" title="Tafsir">📚</button>
+    </div>
+    <div class="bismillah" id="bismillah-el">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+    <div id="ayah-content" class="ayah-list"></div>
+    <div class="aplayer">
+      <div class="ap-label" id="ap-label">Tap ▶ on any verse to play</div>
+      <div class="ap-ctrls">
+        <button class="ap-btn" onclick="prevAyah()">⏮</button>
+        <button class="ap-btn ap-play" id="play-btn" onclick="togglePlay()">▶</button>
+        <button class="ap-btn" onclick="nextAyah()">⏭</button>
+        <button class="ap-btn" id="repeat-btn" onclick="toggleRepeat()">🔁</button>
+      </div>
+      <div class="ap-prog"><div class="ap-fill" id="ap-fill"></div></div>
+    </div>
+    <audio id="quran-audio" onended="onAudioEnd()" ontimeupdate="updateProgress()"></audio>
+  </div>
+
+  <!-- TAFSIR HOME -->
+  <div id="page-tafsir-home" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">Tafsir</h2><div class="par">تفسير ابن كثير</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div class="tafsir-intro">
+      <div class="ti-ar">تَفْسِيرُ الْقُرْآنِ الْكَرِيمِ</div>
+      <div class="ti-txt">Detailed commentary of the Holy Qur'an by Ibn Kathir. Select any Surah to read its Tafsir.</div>
+    </div>
+    <div class="sec-hdr" style="padding:8px 20px">Select Surah</div>
+    <div id="tafsir-surah-list" class="surah-list"></div>
+  </div>
+
+  <!-- TAFSIR READER -->
+  <div id="page-tafsir-reader" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-tafsir-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle" id="tafsir-title">Tafsir</h2><div class="par">Ibn Kathir — ابن كثير</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div id="tafsir-content" class="tafsir-content"></div>
+  </div>
+
+  <!-- PRAYER TIMES -->
+  <div id="page-prayers" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">Prayer Times</h2><div class="par">مواقيت الصلاة</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div class="prayer-loc" id="prayer-loc">📍 Locating...</div>
+    <div class="fp-list">
+      <div class="fp-item" id="fp-fajr"><div class="fp-l"><span class="fp-dot"></span>Fajr</div><b id="fpt-fajr" class="fp-time">--:--</b></div>
+      <div class="fp-item" id="fp-sunrise"><div class="fp-l"><span class="fp-dot"></span>Sunrise</div><b id="fpt-sunrise" class="fp-time">--:--</b></div>
+      <div class="fp-item" id="fp-dhuhr"><div class="fp-l"><span class="fp-dot"></span>Dhuhr</div><b id="fpt-dhuhr" class="fp-time">--:--</b></div>
+      <div class="fp-item" id="fp-asr"><div class="fp-l"><span class="fp-dot"></span>Asr</div><b id="fpt-asr" class="fp-time">--:--</b></div>
+      <div class="fp-item" id="fp-maghrib"><div class="fp-l"><span class="fp-dot"></span>Maghrib</div><b id="fpt-maghrib" class="fp-time">--:--</b></div>
+      <div class="fp-item" id="fp-isha"><div class="fp-l"><span class="fp-dot"></span>Isha</div><b id="fpt-isha" class="fp-time">--:--</b></div>
+    </div>
+    <div class="adhan-wrap"><h3 class="adhan-hdr">🔔 Adhan Alerts</h3><div id="adhan-list"></div></div>
+    <audio id="adhan-audio" src="https://www.islamcan.com/audio/adhan/azan1.mp3"></audio>
+    <nav class="bnav">
+      <div class="ni" onclick="setNav(this);showPage('page-home')"><div class="ni-ico">🏠</div><span>Home</span></div>
+      <div class="ni" onclick="setNav(this);showPage('page-quran-list')"><div class="ni-ico">📖</div><span>Quran</span></div>
+      <div class="nc" onclick="showPage('page-home')"><div class="nc-in">🕋</div></div>
+      <div class="ni" onclick="setNav(this);showPage('page-tasbeeh')"><div class="ni-ico">📿</div><span>Tasbeeh</span></div>
+      <div class="ni active" onclick="setNav(this);showPage('page-prayers')"><div class="ni-ico">⏰</div><span>Prayer</span></div>
+    </nav>
+  </div>
+
+  <!-- QIBLA -->
+  <div id="page-qibla" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">Qibla Direction</h2><div class="par">اتجاه القبلة</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div class="qibla-wrap">
+      <div class="compass-outer">
+        <div class="compass-labels"><span class="cl-n">N</span><span class="cl-e">E</span><span class="cl-s">S</span><span class="cl-w">W</span></div>
+        <div class="compass-needle" id="qibla-needle">
+          <div class="needle-tip">▲</div>
+          <div class="needle-kaaba">🕋</div>
+        </div>
+      </div>
+      <div class="qibla-deg" id="qibla-deg">—°</div>
+      <div class="qibla-info" id="qibla-info">Tap the button below to find Qibla direction</div>
+      <button class="qibla-find-btn" onclick="startQibla()">📍 Find Qibla Direction</button>
+    </div>
+  </div>
+
+  <!-- 99 NAMES ALLAH -->
+  <div id="page-names" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">99 Names of Allah</h2><div class="par">أسماء الله الحسنى</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div id="names-grid" class="names-grid"></div>
+  </div>
+
+  <!-- 99 NAMES PROPHET -->
+  <div id="page-names-prophet" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">Names of Muhammad ﷺ</h2><div class="par">أسماء النبي ﷺ</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div id="prophet-grid" class="names-grid"></div>
+  </div>
+
+  <!-- TASBEEH -->
+  <div id="page-tasbeeh" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">Tasbeeh</h2><div class="par">التسبيح</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div class="tasbeeh-page">
+      <select id="zikr-sel" class="sel" onchange="changeZikr()" style="width:100%;margin-bottom:12px">
+        <option value="سُبْحَانَ اللَّهِ|SubhanAllah">SubhanAllah — سُبْحَانَ اللَّهِ</option>
+        <option value="الْحَمْدُ لِلَّهِ|Alhamdulillah">Alhamdulillah — الْحَمْدُ لِلَّهِ</option>
+        <option value="اللَّهُ أَكْبَرُ|Allahu Akbar">Allahu Akbar — اللَّهُ أَكْبَرُ</option>
+        <option value="لَا إِلَٰهَ إِلَّا اللَّهُ|La ilaha illallah">La ilaha illallah</option>
+        <option value="أَسْتَغْفِرُ اللَّهَ|Astaghfirullah">Astaghfirullah — أَسْتَغْفِرُ اللَّهَ</option>
+        <option value="صَلَّى اللَّهُ عَلَيْهِ|Salawat">Salawat — صَلَّى اللَّهُ عَلَيْهِ</option>
+      </select>
+      <div class="t-arabic" id="t-arabic">سُبْحَانَ اللَّهِ</div>
+      <div class="t-ring-wrap">
+        <svg class="t-svg" viewBox="0 0 220 220">
+          <defs><linearGradient id="tGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#c9963a"/><stop offset="100%" style="stop-color:#f5d07a"/>
+          </linearGradient></defs>
+          <circle class="t-bg" cx="110" cy="110" r="95"/>
+          <circle class="t-prog" id="t-prog" cx="110" cy="110" r="95"/>
+        </svg>
+        <div class="t-tap" onclick="doCount()">
+          <div class="t-num" id="t-count">0</div>
+          <div class="t-lbl">TAP</div>
+        </div>
+      </div>
+      <div class="t-stats">
+        <div class="t-stat"><span>Target</span><b id="t-target">33</b></div>
+        <div class="t-stat"><span>Sets</span><b id="t-sets">0</b></div>
+        <div class="t-stat"><span>Total</span><b id="t-total">0</b></div>
+      </div>
+      <div class="t-btns">
+        <button class="t-reset" onclick="resetT()">Reset</button>
+        <button class="t-tbtn" onclick="setTarget(33)">33</button>
+        <button class="t-tbtn" onclick="setTarget(99)">99</button>
+        <button class="t-tbtn" onclick="setTarget(100)">100</button>
+      </div>
+    </div>
+    <nav class="bnav">
+      <div class="ni" onclick="setNav(this);showPage('page-home')"><div class="ni-ico">🏠</div><span>Home</span></div>
+      <div class="ni" onclick="setNav(this);showPage('page-quran-list')"><div class="ni-ico">📖</div><span>Quran</span></div>
+      <div class="nc" onclick="showPage('page-home')"><div class="nc-in">🕋</div></div>
+      <div class="ni active" onclick="setNav(this);showPage('page-tasbeeh')"><div class="ni-ico">📿</div><span>Tasbeeh</span></div>
+      <div class="ni" onclick="setNav(this);showPage('page-prayers')"><div class="ni-ico">⏰</div><span>Prayer</span></div>
+    </nav>
+  </div>
+
+  <!-- ZAKAT -->
+  <div id="page-zakat" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">Zakat Calculator</h2><div class="par">حاسبة الزكاة</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div class="zakat-page">
+      <div class="z-info">Zakat is 2.5% of total savings held above Nisab for one lunar year.</div>
+      <label class="zlbl">Currency</label>
+      <select id="z-currency" class="sel" onchange="calcZakat()">
+        <option value="USD">USD ($)</option><option value="PKR">PKR (₨)</option>
+        <option value="AFN">AFN (؋)</option><option value="GBP">GBP (£)</option>
+        <option value="EUR">EUR (€)</option><option value="SAR">SAR (﷼)</option>
+      </select>
+      <label class="zlbl">Total Savings</label><input type="number" id="z-savings" class="zinput" placeholder="Your savings amount" oninput="calcZakat()"/>
+      <label class="zlbl">Gold Value</label><input type="number" id="z-gold" class="zinput" placeholder="Value of gold owned" oninput="calcZakat()"/>
+      <label class="zlbl">Silver Value</label><input type="number" id="z-silver" class="zinput" placeholder="Value of silver owned" oninput="calcZakat()"/>
+      <label class="zlbl">Business Assets</label><input type="number" id="z-business" class="zinput" placeholder="Business inventory" oninput="calcZakat()"/>
+      <label class="zlbl">Debts (subtract)</label><input type="number" id="z-debts" class="zinput" placeholder="Loans / debts owed" oninput="calcZakat()"/>
+      <div class="z-result"><div class="zr-lbl">Your Zakat</div><div class="zr-amt" id="zr-amt">—</div><div class="zr-sub" id="zr-sub">Enter your savings above</div></div>
+    </div>
+  </div>
+
+  <!-- BOOKMARKS -->
+  <div id="page-bookmarks" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">Bookmarks</h2><div class="par">المفضلة</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div id="bm-list" class="bm-list"></div>
+  </div>
+
+  <!-- TAFSIR BOTTOM SHEET -->
+  <div id="tafsir-sheet" class="t-sheet hidden">
+    <div class="t-overlay" onclick="closeSheet()"></div>
+    <div class="t-sheet-body">
+      <div class="t-sheet-handle"></div>
+      <div class="t-sheet-hdr"><span class="t-sheet-title" id="sheet-title">Tafsir</span><button class="t-sheet-close" onclick="closeSheet()">✕</button></div>
+      <div class="t-sheet-ar" id="sheet-ar"></div>
+      <div class="t-sheet-txt" id="sheet-txt">Loading...</div>
+    </div>
+  </div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
+
