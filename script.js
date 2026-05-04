@@ -1,796 +1,416 @@
-/* ═══════════════════════════════════════════
-   AL-QUR'AN PRO — MÎK Edition — script.js
-   ═══════════════════════════════════════════ */
-
 'use strict';
-
-// ── STATE ──────────────────────────────────
-const State = {
-  currentSurah: null,
-  currentAyah: 1,
-  currentLang: 'en.sahih',
-  currentReciter: 'ar.alafasy',
-  prayerTimes: {},
-  adhanEnabled: { Fajr: true, Dhuhr: false, Asr: false, Maghrib: true, Isha: true },
-  bookmarks: JSON.parse(localStorage.getItem('mik_bookmarks') || '[]'),
-  tasbeehCount: 0,
-  tasbeehTarget: 33,
-  tasbeehSets: 0,
-  currentZikr: { arabic: 'سُبْحَانَ اللَّهِ', name: 'SubhanAllah' },
-  isPlaying: false,
-  isRepeat: false,
-  arabicFontSize: 28,
-  theme: localStorage.getItem('mik_theme') || 'dark',
-  allSurahs: [],
+// ═══ STATE ═══
+const S = {
+  surah:null, ayah:1, lang:'en.sahih', reciter:'ar.alafasy',
+  prayers:{}, adhan:{Fajr:true,Dhuhr:false,Asr:false,Maghrib:true,Isha:true},
+  bookmarks:JSON.parse(localStorage.getItem('mik_bm')||'[]'),
+  tCount:0, tTarget:33, tSets:0, tTotal:0,
+  zikr:{ar:'سُبْحَانَ اللَّهِ',name:'SubhanAllah'},
+  playing:false, repeat:false, asz:28,
+  theme:localStorage.getItem('mik_theme')||'dark',
+  allSurahs:[], cache:{}, tafsirMode:false,
+  lastRead:JSON.parse(localStorage.getItem('mik_lr')||'null'),
 };
 
-// ── INIT ──────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
+// ═══ INIT ═══
+window.addEventListener('DOMContentLoaded', ()=>{
   applyTheme();
-  setTimeout(() => {
-    document.getElementById('splash').style.opacity = '0';
-    document.getElementById('splash').style.transition = 'opacity 0.5s';
-    setTimeout(() => {
-      document.getElementById('splash').style.display = 'none';
-      showPage('page-home');
-    }, 500);
+  setTimeout(()=>{
+    const sp = document.getElementById('splash');
+    sp.style.transition='opacity 0.5s'; sp.style.opacity='0';
+    setTimeout(()=>{ sp.style.display='none'; showPage('page-home'); }, 500);
   }, 2800);
-
-  startClock();
-  loadHijriDate();
-  getLocation();
-  loadSurahList();
-  loadNames();
-  loadProphetNames();
-  setupPrayerToggles();
-  loadBookmarks();
-  setupRingSVG();
+  startClock(); loadHijri(); getLocation();
+  loadSurahs(); loadNames(); loadProphetNames();
+  setupAdhanToggles(); renderBookmarks(); renderLastRead();
 });
 
-// ── THEME ──────────────────────────────────
-function applyTheme() {
-  document.documentElement.setAttribute('data-theme', State.theme === 'light' ? 'light' : '');
-}
-function toggleDarkLight() {
-  State.theme = State.theme === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('mik_theme', State.theme);
-  applyTheme();
-  document.getElementById('theme-btn').textContent = State.theme === 'dark' ? '☀️' : '🌙';
+// ═══ THEME ═══
+function applyTheme(){ document.documentElement.setAttribute('data-theme', S.theme==='light'?'light':''); }
+function toggleTheme(){
+  S.theme = S.theme==='dark'?'light':'dark';
+  localStorage.setItem('mik_theme', S.theme); applyTheme();
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = S.theme==='dark'?'☀️':'🌙';
 }
 
-// ── PAGE NAVIGATION ──────────────────────────────────
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-  const page = document.getElementById(id);
-  if (page) { page.classList.remove('hidden'); }
-  if (id === 'page-bookmarks') loadBookmarks();
+// ═══ NAVIGATION ═══
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  const p = document.getElementById(id);
+  if(p) p.classList.remove('hidden');
+  if(id==='page-bookmarks') renderBookmarks();
+  if(id==='page-tafsir-home') loadTafsirSurahList();
 }
-function setNav(el) {
-  el.closest('.bottom-nav').querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+function setNav(el){
+  const nav = el.closest('.bnav');
+  if(nav) nav.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
 }
-function setTab(el, type) {
-  el.closest('.juz-tabs').querySelectorAll('.juz-tab').forEach(t => t.classList.remove('active'));
+function toggleSearch(){
+  const b = document.getElementById('sbar');
+  if(b){ b.classList.toggle('hidden'); if(!b.classList.contains('hidden')) document.getElementById('sinput').focus(); }
+}
+function filterSurahs(){
+  const q = (document.getElementById('sinput').value||'').toLowerCase();
+  renderSurahList(S.allSurahs.filter(s=>
+    s.englishName.toLowerCase().includes(q)||s.englishNameTranslation.toLowerCase().includes(q)||String(s.number).includes(q)
+  ));
+}
+function setTab(el, type){
+  el.closest('.jtabs').querySelectorAll('.jtab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  if (type === 'surah') renderSurahList(State.allSurahs);
-  else showToast('Coming soon! 🌟');
-}
-function toggleSearch() {
-  const bar = document.getElementById('search-bar');
-  bar.classList.toggle('hidden');
-  if (!bar.classList.contains('hidden')) document.getElementById('search-input').focus();
-}
-function filterSurahs() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const filtered = State.allSurahs.filter(s =>
-    s.englishName.toLowerCase().includes(q) ||
-    s.englishNameTranslation.toLowerCase().includes(q) ||
-    String(s.number).includes(q)
-  );
-  renderSurahList(filtered);
+  if(type==='surah') renderSurahList(S.allSurahs);
+  else if(type==='fav'){
+    const favNums = S.bookmarks.filter(b=>!b.ayahNum).map(b=>b.surahNum);
+    renderSurahList(S.allSurahs.filter(s=>favNums.includes(s.number)));
+  }
+  else if(type==='juz') renderJuzList();
 }
 
-// ── CLOCK ──────────────────────────────────
-function startClock() {
-  function tick() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const el = document.getElementById('current-time');
-    if (el) el.textContent = `${h}:${m}`;
+// ═══ CLOCK ═══
+function startClock(){
+  const tick=()=>{
+    const now=new Date(), h=String(now.getHours()).padStart(2,'0'), m=String(now.getMinutes()).padStart(2,'0');
+    const el=document.getElementById('current-time'); if(el) el.textContent=`${h}:${m}`;
     updateNextPrayer();
-  }
-  tick();
-  setInterval(tick, 1000);
+  };
+  tick(); setInterval(tick,1000);
 }
 
-// ── HIJRI DATE ──────────────────────────────────
-function loadHijriDate() {
-  const now = new Date();
-  const months = ['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Awwal','Jumada al-Thani','Rajab','Shaaban','Ramadan','Shawwal','Dhul Qidah','Dhul Hijjah'];
-  try {
-    const hijri = toHijri(now.getFullYear(), now.getMonth() + 1, now.getDate());
-    const el = document.getElementById('hijri-today');
-    if (el) el.textContent = `${hijri.d} ${months[hijri.m - 1]} ${hijri.y} AH`;
-    calcIslamicEvents(hijri);
-  } catch(e) {
-    const el = document.getElementById('hijri-today');
-    if (el) el.textContent = 'Islamic Calendar';
-  }
+// ═══ HIJRI DATE ═══
+function loadHijri(){
+  const months=['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Awwal','Jumada al-Thani','Rajab','Shaaban','Ramadan','Shawwal','Dhul Qidah','Dhul Hijjah'];
+  try{
+    const now=new Date(), h=toHijri(now.getFullYear(),now.getMonth()+1,now.getDate());
+    const el=document.getElementById('hijri-today');
+    if(el) el.textContent=`${h.d} ${months[h.m-1]} ${h.y} AH`;
+    calcEvents(h);
+  }catch(e){ const el=document.getElementById('hijri-today'); if(el) el.textContent='Islamic Calendar'; }
+}
+function toHijri(y,m,d){
+  if(m<=2){y--;m+=12;}
+  const A=Math.floor(y/100), B=2-A+Math.floor(A/4);
+  const jd=Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524;
+  const z=jd-1948440+10632, n=Math.floor((z-1)/10631), zz=z-10631*n+354;
+  const j=Math.floor((10985-zz)/5316)*Math.floor(50*zz/17719)+Math.floor(zz/5670)*Math.floor(43*zz/15238);
+  const zzz=zz-Math.floor((30-j)/15)*Math.floor(17719*j/50)-Math.floor(j/16)*Math.floor(15238*j/43)+29;
+  return{y:30*n+j-30, m:Math.floor(24*zzz/709), d:zzz-Math.floor(709*Math.floor(24*zzz/709)/24)};
+}
+function calcEvents(h){
+  const r=document.getElementById('ramadan-txt'), e=document.getElementById('eid-txt');
+  if(h.m===9){ const rem=30-h.d; if(r) r.textContent=rem>0?`Ramadan: ${rem}d left`:'Ramadan: Last day!'; }
+  else{ if(r) r.textContent='Ramadan: Month 9'; }
+  if(h.m===10&&h.d<=3){ if(e) e.textContent=`Eid al-Fitr: Day ${h.d}! 🎉`; }
+  else{ if(e) e.textContent='Eid: Shawwal 1'; }
 }
 
-function toHijri(year, month, day) {
-  const jd = gregorianToJulian(year, month, day);
-  return julianToHijri(jd);
+// ═══ LOCATION & PRAYER ═══
+function getLocation(){
+  if(!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(pos=>{
+    fetchPrayers(pos.coords.latitude, pos.coords.longitude);
+    reverseGeo(pos.coords.latitude, pos.coords.longitude);
+  }, ()=>{ fetchPrayers(21.3891, 39.8579); const l=document.getElementById('prayer-loc'); if(l) l.textContent='📍 Mecca (default)'; });
 }
-function gregorianToJulian(year, month, day) {
-  if (month <= 2) { year--; month += 12; }
-  const A = Math.floor(year / 100);
-  const B = 2 - A + Math.floor(A / 4);
-  return Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + B - 1524;
-}
-function julianToHijri(jd) {
-  jd = Math.floor(jd) + 0.5;
-  const z = jd - 1948440 + 10632;
-  const n = Math.floor((z - 1) / 10631);
-  const zz = z - 10631 * n + 354;
-  const j = Math.floor((10985 - zz) / 5316) * Math.floor(50 * zz / 17719) + Math.floor(zz / 5670) * Math.floor(43 * zz / 15238);
-  const zzz = zz - Math.floor((30 - j) / 15) * Math.floor(17719 * j / 50) - Math.floor(j / 16) * Math.floor(15238 * j / 43) + 29;
-  const m = Math.floor(24 * zzz / 709);
-  const d = zzz - Math.floor(709 * m / 24);
-  const y = 30 * n + j - 30;
-  return { y, m, d };
-}
-
-function calcIslamicEvents(hijri) {
-  const ramadanEl = document.getElementById('ramadan-countdown');
-  const eidEl = document.getElementById('eid-fitr-countdown');
-  if (hijri.m === 9) {
-    const rem = 30 - hijri.d;
-    if (ramadanEl) ramadanEl.textContent = rem > 0 ? `Ramadan: ${rem} days left` : 'Ramadan: Last day!';
-  } else {
-    if (ramadanEl) ramadanEl.textContent = `Ramadan: Month 9`;
-  }
-  if (hijri.m === 10 && hijri.d <= 3) {
-    if (eidEl) eidEl.textContent = `Eid al-Fitr: Day ${hijri.d}! 🎉`;
-  } else {
-    if (eidEl) eidEl.textContent = 'Eid: Shawwal 1';
-  }
-}
-
-// ── LOCATION & PRAYER TIMES ──────────────────────────────────
-function getLocation() {
-  if (!navigator.geolocation) return;
-  navigator.geolocation.getCurrentPosition(pos => {
-    fetchPrayerTimes(pos.coords.latitude, pos.coords.longitude);
-    reverseGeocode(pos.coords.latitude, pos.coords.longitude);
-  }, () => {
-    // fallback: Mecca
-    fetchPrayerTimes(21.3891, 39.8579);
-    const loc = document.getElementById('prayer-location');
-    if (loc) loc.textContent = '📍 Mecca (default)';
-  });
-}
-
-function reverseGeocode(lat, lon) {
+function reverseGeo(lat,lon){
   fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
-    .then(r => r.json()).then(data => {
-      const city = data.address.city || data.address.town || data.address.village || 'Your Location';
-      const country = data.address.country || '';
-      const loc = document.getElementById('prayer-location');
-      if (loc) loc.textContent = `📍 ${city}, ${country}`;
-    }).catch(() => {});
+    .then(r=>r.json()).then(d=>{
+      const city=d.address.city||d.address.town||d.address.village||'Your City';
+      const country=d.address.country||'';
+      const l=document.getElementById('prayer-loc'); if(l) l.textContent=`📍 ${city}, ${country}`;
+    }).catch(()=>{});
 }
-
-function fetchPrayerTimes(lat, lon) {
-  const today = new Date();
-  const d = today.getDate(), m = today.getMonth() + 1, y = today.getFullYear();
-  fetch(`https://api.aladhan.com/v1/timings/${d}-${m}-${y}?latitude=${lat}&longitude=${lon}&method=2`)
-    .then(r => r.json()).then(data => {
-      const t = data.data.timings;
-      State.prayerTimes = {
-        Fajr: t.Fajr, Sunrise: t.Sunrise, Dhuhr: t.Dhuhr,
-        Asr: t.Asr, Maghrib: t.Maghrib, Isha: t.Isha
-      };
-      renderPrayerTimes();
-      scheduleAdhans();
-    }).catch(() => {});
+function fetchPrayers(lat,lon){
+  const now=new Date();
+  fetch(`https://api.aladhan.com/v1/timings/${now.getDate()}-${now.getMonth()+1}-${now.getFullYear()}?latitude=${lat}&longitude=${lon}&method=2`)
+    .then(r=>r.json()).then(d=>{
+      const t=d.data.timings;
+      S.prayers={Fajr:t.Fajr,Sunrise:t.Sunrise,Dhuhr:t.Dhuhr,Asr:t.Asr,Maghrib:t.Maghrib,Isha:t.Isha};
+      renderPrayers(); scheduleAdhans();
+    }).catch(()=>{});
 }
-
-function renderPrayerTimes() {
-  const p = State.prayerTimes;
-  const map = { Fajr:'p-fajr', Dhuhr:'p-dhuhr', Asr:'p-asr', Maghrib:'p-maghrib', Isha:'p-isha' };
-  Object.entries(map).forEach(([name, id]) => {
-    const el = document.getElementById(id);
-    if (el && p[name]) el.textContent = formatTime12(p[name]);
-  });
-  const fullMap = { Fajr:'fp-fajr', Sunrise:'fp-sunrise', Dhuhr:'fp-dhuhr', Asr:'fp-asr', Maghrib:'fp-maghrib', Isha:'fp-isha' };
-  Object.entries(fullMap).forEach(([name, id]) => {
-    const el = document.getElementById(id);
-    if (el && p[name]) el.querySelector('.fp-time').textContent = formatTime12(p[name]);
-  });
-  updateNextPrayer();
-}
-
-function formatTime12(time24) {
-  const [h, m] = time24.split(':').map(Number);
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  const h12 = h % 12 || 12;
+function fmt12(t24){
+  const[h,m]=t24.split(':').map(Number), ampm=h>=12?'PM':'AM', h12=h%12||12;
   return `${h12}:${String(m).padStart(2,'0')} ${ampm}`;
 }
-
-function updateNextPrayer() {
-  const prayers = ['Fajr','Dhuhr','Asr','Maghrib','Isha'];
-  const now = new Date();
-  const nowMins = now.getHours() * 60 + now.getMinutes();
-
-  for (const name of prayers) {
-    const t = State.prayerTimes[name];
-    if (!t) continue;
-    const [h, m] = t.split(':').map(Number);
-    const pMins = h * 60 + m;
-    if (pMins > nowMins) {
-      const rem = pMins - nowMins;
-      const el = document.getElementById('next-prayer-name');
-      const tel = document.getElementById('next-prayer-time');
-      const nextPillId = name.toLowerCase();
-      document.querySelectorAll('.prayer-pill').forEach(p => p.classList.remove('active'));
-      if (el) el.textContent = name;
-      if (tel) tel.textContent = `${formatTime12(t)} · in ${rem}min`;
-
-      // Full prayer page highlight
-      document.querySelectorAll('.full-prayer-item').forEach(i => i.classList.remove('next-prayer'));
-      const fp = document.getElementById(`fp-${name.toLowerCase()}`);
-      if (fp) fp.classList.add('next-prayer');
+function renderPrayers(){
+  const p=S.prayers;
+  ['Fajr','Dhuhr','Asr','Maghrib','Isha'].forEach(name=>{
+    const id=name.toLowerCase();
+    const pill=document.getElementById(`p-${id}`); if(pill&&p[name]) pill.textContent=fmt12(p[name]);
+    const full=document.getElementById(`fpt-${id}`); if(full&&p[name]) full.textContent=fmt12(p[name]);
+  });
+  if(p.Sunrise){ const s=document.getElementById('fpt-sunrise'); if(s) s.textContent=fmt12(p.Sunrise); }
+  updateNextPrayer();
+}
+function updateNextPrayer(){
+  const names=['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+  const now=new Date(), nm=now.getHours()*60+now.getMinutes();
+  document.querySelectorAll('.fp-item').forEach(i=>i.classList.remove('next'));
+  document.querySelectorAll('.ppill').forEach(i=>i.classList.remove('active'));
+  for(const name of names){
+    const t=S.prayers[name]; if(!t) continue;
+    const[h,m]=t.split(':').map(Number), pm=h*60+m;
+    if(pm>nm){
+      const rem=pm-nm;
+      const el=document.getElementById('next-prayer-name'), tel=document.getElementById('next-prayer-time');
+      if(el) el.textContent=name;
+      if(tel) tel.textContent=`${fmt12(t)} · in ${rem}min`;
+      const fp=document.getElementById(`fp-${name.toLowerCase()}`); if(fp) fp.classList.add('next');
       return;
     }
   }
 }
-
-function scheduleAdhans() {
-  const prayers = ['Fajr','Dhuhr','Asr','Maghrib','Isha'];
-  prayers.forEach(name => {
-    const t = State.prayerTimes[name];
-    if (!t || !State.adhanEnabled[name]) return;
-    const [h, m] = t.split(':').map(Number);
-    const now = new Date();
-    const pTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
-    const delay = pTime - now;
-    if (delay > 0 && delay < 86400000) {
-      setTimeout(() => {
-        const audio = document.getElementById('adhan-audio');
-        if (audio) audio.play().catch(() => {});
-        showToast(`🕌 ${name} Adhan`);
-      }, delay);
-    }
+function scheduleAdhans(){
+  ['Fajr','Dhuhr','Asr','Maghrib','Isha'].forEach(name=>{
+    if(!S.prayers[name]||!S.adhan[name]) return;
+    const[h,m]=S.prayers[name].split(':').map(Number);
+    const now=new Date(), pt=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m,0);
+    const delay=pt-now;
+    if(delay>0&&delay<86400000) setTimeout(()=>{ const a=document.getElementById('adhan-audio'); if(a) a.play().catch(()=>{}); showToast(`🕌 ${name} Adhan`); }, delay);
   });
 }
-
-function setupPrayerToggles() {
-  const list = document.getElementById('prayer-settings-list');
-  if (!list) return;
-  ['Fajr','Dhuhr','Asr','Maghrib','Isha'].forEach(name => {
-    const div = document.createElement('div');
-    div.className = 'adhan-item';
-    const on = State.adhanEnabled[name];
-    div.innerHTML = `
-      <span class="adhan-item-name">🕌 ${name}</span>
-      <button class="toggle-btn ${on ? 'on' : ''}" onclick="toggleAdhan('${name}', this)"></button>
-    `;
-    list.appendChild(div);
+function setupAdhanToggles(){
+  const list=document.getElementById('adhan-list'); if(!list) return;
+  ['Fajr','Dhuhr','Asr','Maghrib','Isha'].forEach(name=>{
+    const d=document.createElement('div'); d.className='adhan-item';
+    d.innerHTML=`<span>🕌 ${name}</span><button class="toggle ${S.adhan[name]?'on':''}" onclick="toggleAdhan('${name}',this)"></button>`;
+    list.appendChild(d);
   });
 }
+function toggleAdhan(name,btn){ S.adhan[name]=!S.adhan[name]; btn.classList.toggle('on',S.adhan[name]); }
 
-function toggleAdhan(name, btn) {
-  State.adhanEnabled[name] = !State.adhanEnabled[name];
-  btn.classList.toggle('on', State.adhanEnabled[name]);
+// ═══ SURAH LIST ═══
+function loadSurahs(){
+  fetch('https://api.alquran.cloud/v1/surah').then(r=>r.json()).then(d=>{
+    S.allSurahs=d.data; renderSurahList(d.data);
+    loadTafsirSurahList();
+  }).catch(()=>showToast('No internet connection'));
 }
-
-// ── SURAH LIST ──────────────────────────────────
-function loadSurahList() {
-  fetch('https://api.alquran.cloud/v1/surah')
-    .then(r => r.json()).then(data => {
-      State.allSurahs = data.data;
-      renderSurahList(data.data);
-    }).catch(() => showToast('Failed to load Quran data'));
-}
-
-function renderSurahList(surahs) {
-  const container = document.getElementById('surah-list-container');
-  if (!container) return;
-  container.innerHTML = '';
-  const revelationMap = { Meccan: 'مكية', Medinan: 'مدنية' };
-  surahs.forEach(s => {
-    const div = document.createElement('div');
-    div.className = 'surah-item';
-    div.onclick = () => openSurah(s.number, s.name, s.englishName, s.numberOfAyahs, s.revelationType);
-    div.innerHTML = `
-      <div class="surah-num-badge">${s.number}</div>
-      <div class="surah-info">
-        <div class="surah-name-en">${s.englishName}</div>
-        <div class="surah-meta">${s.englishNameTranslation} · ${s.numberOfAyahs} verses · ${s.revelationType}</div>
-      </div>
-      <div class="surah-name-ar">${s.name}</div>
-    `;
-    container.appendChild(div);
+function renderSurahList(surahs){
+  const c=document.getElementById('surah-list'); if(!c) return;
+  c.innerHTML='';
+  if(!surahs.length){ c.innerHTML='<div class="empty-state"><div class="empty-ico">📭</div><div>No surahs found</div></div>'; return; }
+  surahs.forEach(s=>{
+    const d=document.createElement('div'); d.className='si';
+    d.onclick=()=>openSurah(s.number,s.name,s.englishName,s.numberOfAyahs,s.revelationType);
+    d.innerHTML=`<div class="si-num">${s.number}</div><div class="si-info"><div class="si-en">${s.englishName}</div><div class="si-meta">${s.englishNameTranslation} · ${s.numberOfAyahs} verses · ${s.revelationType}</div></div><div class="si-ar">${s.name}</div>`;
+    c.appendChild(d);
   });
 }
-
-// ── READER ──────────────────────────────────
-let surahAyahsCache = {};
-
-function openSurah(num, nameAr, nameEn, ayahCount, type) {
-  State.currentSurah = { num, nameAr, nameEn, ayahCount, type };
-  State.currentAyah = 1;
-
-  document.getElementById('surah-title-display').textContent = nameEn;
-  document.getElementById('surah-info-display').textContent = `${nameAr} · ${ayahCount} verses`;
-  document.getElementById('bismillah-banner').style.display = num === 9 ? 'none' : 'block';
-
-  const bm = document.getElementById('bookmark-btn');
-  if (bm) {
-    const isBookmarked = State.bookmarks.some(b => b.surahNum === num);
-    bm.textContent = isBookmarked ? '🔖' : '🔖';
-    bm.style.opacity = isBookmarked ? '1' : '0.5';
+function renderJuzList(){
+  const c=document.getElementById('surah-list'); if(!c) return;
+  c.innerHTML='';
+  for(let j=1;j<=30;j++){
+    const d=document.createElement('div'); d.className='si';
+    d.onclick=()=>showToast(`Juz ${j} coming soon! 🌟`);
+    d.innerHTML=`<div class="si-num">${j}</div><div class="si-info"><div class="si-en">Juz ${j}</div><div class="si-meta">Part ${j} of 30</div></div><div class="si-ar">جزء ${j}</div>`;
+    c.appendChild(d);
   }
+}
 
+// ═══ READER ═══
+function openSurah(num,nameAr,nameEn,ayahCount,type){
+  S.surah={num,nameAr,nameEn,ayahCount,type}; S.ayah=1;
+  document.getElementById('reader-title').textContent=nameEn;
+  document.getElementById('reader-sub').textContent=`${nameAr} · ${ayahCount} verses`;
+  document.getElementById('bismillah-el').style.display=num===9?'none':'block';
+  updateBmBtn();
+  saveLastRead(num,nameAr,nameEn,1,ayahCount);
   showPage('page-reader');
-  loadSurahContent(num);
+  loadReader(num);
 }
-
-function loadSurahContent(num) {
-  const container = document.getElementById('ayah-content');
-  container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2)">Loading...</div>';
-
-  if (surahAyahsCache[num + '_' + State.currentLang]) {
-    renderAyahs(surahAyahsCache[num + '_' + State.currentLang]);
-    return;
-  }
-
-  const arabicUrl = `https://api.alquran.cloud/v1/surah/${num}`;
-  const transUrl = `https://api.alquran.cloud/v1/surah/${num}/${State.currentLang}`;
-
-  Promise.all([fetch(arabicUrl).then(r => r.json()), fetch(transUrl).then(r => r.json())])
-    .then(([arabicData, transData]) => {
-      const combined = arabicData.data.ayahs.map((a, i) => ({
-        number: a.numberInSurah,
-        arabic: a.text,
-        translation: transData.data.ayahs[i]?.text || ''
-      }));
-      surahAyahsCache[num + '_' + State.currentLang] = combined;
-      renderAyahs(combined);
-    }).catch(() => {
-      container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2)">Failed to load. Check internet.</div>';
-    });
+function loadReader(num){
+  const c=document.getElementById('ayah-content');
+  c.innerHTML=`<div class="loading-state"><div class="spinner"></div>Loading...</div>`;
+  const key=num+'_'+S.lang;
+  if(S.cache[key]){ renderAyahs(S.cache[key]); return; }
+  Promise.all([
+    fetch(`https://api.alquran.cloud/v1/surah/${num}`).then(r=>r.json()),
+    fetch(`https://api.alquran.cloud/v1/surah/${num}/${S.lang}`).then(r=>r.json())
+  ]).then(([ar,tr])=>{
+    const combined=ar.data.ayahs.map((a,i)=>({n:a.numberInSurah,ar:a.text,tr:tr.data.ayahs[i]?.text||''}));
+    S.cache[key]=combined; renderAyahs(combined);
+  }).catch(()=>{ c.innerHTML='<div class="loading-state">Failed to load. Check internet.</div>'; });
 }
-
-function renderAyahs(ayahs) {
-  const container = document.getElementById('ayah-content');
-  container.innerHTML = '';
-  ayahs.forEach(a => {
-    const div = document.createElement('div');
-    div.className = 'ayah-item';
-    div.id = `ayah-${a.number}`;
-    div.innerHTML = `
+function renderAyahs(ayahs){
+  const c=document.getElementById('ayah-content'); c.innerHTML='';
+  ayahs.forEach(a=>{
+    const d=document.createElement('div'); d.className='ayah-item'; d.id=`ay-${a.n}`;
+    d.innerHTML=`
       <div class="ayah-top">
-        <div class="ayah-num">${a.number}</div>
-        <div class="ayah-actions">
-          <button class="ayah-action-btn" onclick="playAyah(${a.number})" title="Play">▶</button>
-          <button class="ayah-action-btn" onclick="bookmarkAyah(${a.number})" title="Bookmark">🔖</button>
-          <button class="ayah-action-btn" onclick="copyAyah(${a.number}, \`${escapeQuotes(a.arabic)}\`, \`${escapeQuotes(a.translation)}\`)" title="Copy">📋</button>
+        <div class="ayah-num">${a.n}</div>
+        <div class="ayah-acts">
+          <button class="aab" onclick="playAyah(${a.n})" title="Play">▶</button>
+          <button class="aab" onclick="openTafsirSheet(${a.n},'${esc(a.ar)}')" title="Tafsir">📚</button>
+          <button class="aab" onclick="bmAyah(${a.n})" title="Bookmark">🔖</button>
+          <button class="aab" onclick="copyAyah(${a.n},'${esc(a.ar)}','${esc(a.tr)}')" title="Copy">📋</button>
+          <button class="aab" onclick="shareAyah(${a.n},'${esc(a.ar)}','${esc(a.tr)}')" title="Share">📤</button>
         </div>
       </div>
-      <div class="ayah-arabic" style="font-size:${State.arabicFontSize}px">${a.arabic}</div>
-      <div class="ayah-translation">${a.translation}</div>
+      <div class="ayah-arabic" style="font-size:${S.asz}px">${a.ar}</div>
+      <div class="ayah-trans">${a.tr}</div>
+      ${S.tafsirMode?`<div class="ayah-tafsir-inline" id="ti-${a.n}"><span class="tafsir-label">📚 TAFSIR — IBN KATHIR</span><div id="ti-txt-${a.n}">Loading...</div></div>`:''}
     `;
-    container.appendChild(div);
+    c.appendChild(d);
+    if(S.tafsirMode) loadInlineTafsir(a.n, S.surah?.num);
   });
 }
+function esc(s){ return (s||'').replace(/`/g,"'").replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function changeLang(){ S.lang=document.getElementById('lang-sel').value; S.cache={}; if(S.surah) loadReader(S.surah.num); }
+function changeReciter(){ S.reciter=document.getElementById('reciter-sel').value; if(S.playing) playAyah(S.ayah); }
+function changeFontSize(d){ S.asz=Math.max(18,Math.min(44,S.asz+d)); document.querySelectorAll('.ayah-arabic').forEach(el=>el.style.fontSize=S.asz+'px'); }
 
-function escapeQuotes(str) {
-  return str.replace(/`/g, "'").replace(/\\/g, '\\\\');
+// ═══ TAFSIR MODE (inline) ═══
+function toggleTafsirMode(){
+  S.tafsirMode=!S.tafsirMode;
+  const btn=document.getElementById('tafsir-mode-btn');
+  if(btn) btn.classList.toggle('active',S.tafsirMode);
+  if(S.surah) loadReader(S.surah.num);
+  showToast(S.tafsirMode?'Tafsir mode ON 📚':'Tafsir mode OFF');
+}
+function loadInlineTafsir(ayahNum, surahNum){
+  const el=document.getElementById(`ti-txt-${ayahNum}`); if(!el) return;
+  fetch(`https://api.quran.com/api/v4/tafsirs/169/by_ayah?ayah_key=${surahNum}:${ayahNum}`)
+    .then(r=>r.json()).then(d=>{
+      const text=d.tafsir?.text||'';
+      el.innerHTML=cleanTafsir(text)||'Tafsir not available for this verse.';
+    }).catch(()=>{ el.textContent='Tafsir unavailable.'; });
 }
 
-function changeLanguage() {
-  State.currentLang = document.getElementById('lang-select').value;
-  surahAyahsCache = {};
-  if (State.currentSurah) loadSurahContent(State.currentSurah.num);
+// ═══ TAFSIR SHEET (bottom popup per verse) ═══
+function openTafsirSheet(ayahNum, arabicText){
+  const sheet=document.getElementById('tafsir-sheet');
+  const title=document.getElementById('sheet-title');
+  const ar=document.getElementById('sheet-ar');
+  const txt=document.getElementById('sheet-txt');
+  if(!sheet) return;
+  if(title) title.textContent=`Tafsir — Verse ${ayahNum}`;
+  if(ar) ar.textContent=arabicText;
+  if(txt) txt.innerHTML='<div class="loading-state"><div class="spinner"></div>Loading...</div>';
+  sheet.classList.remove('hidden');
+  if(!S.surah) return;
+  fetch(`https://api.quran.com/api/v4/tafsirs/169/by_ayah?ayah_key=${S.surah.num}:${ayahNum}`)
+    .then(r=>r.json()).then(d=>{
+      const text=d.tafsir?.text||'Tafsir not available for this verse.';
+      if(txt) txt.innerHTML=cleanTafsir(text);
+    }).catch(()=>{ if(txt) txt.textContent='Tafsir unavailable. Check internet.'; });
+}
+function closeSheet(){ const s=document.getElementById('tafsir-sheet'); if(s) s.classList.add('hidden'); }
+function cleanTafsir(html){
+  const tmp=document.createElement('div'); tmp.innerHTML=html;
+  return tmp.textContent||tmp.innerText||'';
 }
 
-function changeFontSize(delta) {
-  State.arabicFontSize = Math.max(18, Math.min(42, State.arabicFontSize + delta));
-  document.querySelectorAll('.ayah-arabic').forEach(el => {
-    el.style.fontSize = State.arabicFontSize + 'px';
+// ═══ TAFSIR PAGE ═══
+function loadTafsirSurahList(){
+  const c=document.getElementById('tafsir-surah-list'); if(!c||!S.allSurahs.length) return;
+  c.innerHTML='';
+  S.allSurahs.forEach(s=>{
+    const d=document.createElement('div'); d.className='si';
+    d.onclick=()=>openTafsirPage(s.number,s.englishName,s.name,s.numberOfAyahs);
+    d.innerHTML=`<div class="si-num">${s.number}</div><div class="si-info"><div class="si-en">${s.englishName}</div><div class="si-meta">${s.englishNameTranslation} · ${s.numberOfAyahs} verses</div></div><div class="si-ar">${s.name}</div>`;
+    c.appendChild(d);
   });
 }
-
-// ── AUDIO ──────────────────────────────────
-function playAyah(num) {
-  if (!State.currentSurah) return;
-  State.currentAyah = num;
-  State.isPlaying = true;
-
-  const surahStr = String(State.currentSurah.num).padStart(3, '0');
-  const ayahStr = String(num).padStart(3, '0');
-  const url = `https://cdn.islamic.network/quran/audio/128/${State.currentReciter}/${State.currentSurah.num * 1000 + num}.mp3`;
-
-  const audio = document.getElementById('quran-player');
-  audio.src = url;
-  audio.play().catch(() => {
-    // Fallback URL
-    const fallback = `https://everyayah.com/data/Alafasy_128kbps/${surahStr}${ayahStr}.mp3`;
-    audio.src = fallback;
-    audio.play().catch(() => showToast('Audio not available'));
-  });
-
-  document.querySelectorAll('.ayah-item').forEach(el => el.classList.remove('playing'));
-  const active = document.getElementById(`ayah-${num}`);
-  if (active) {
-    active.classList.add('playing');
-    active.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-
-  document.getElementById('play-pause-btn').textContent = '⏸';
-  document.getElementById('audio-ayah-label').textContent = `Verse ${num} of ${State.currentSurah.ayahCount}`;
-}
-
-function togglePlay() {
-  const audio = document.getElementById('quran-player');
-  if (audio.paused) {
-    audio.play();
-    State.isPlaying = true;
-    document.getElementById('play-pause-btn').textContent = '⏸';
-  } else {
-    audio.pause();
-    State.isPlaying = false;
-    document.getElementById('play-pause-btn').textContent = '▶';
-  }
-}
-
-function nextAyah() {
-  if (!State.currentSurah) return;
-  if (State.currentAyah < State.currentSurah.ayahCount) playAyah(State.currentAyah + 1);
-}
-function prevAyah() {
-  if (State.currentAyah > 1) playAyah(State.currentAyah - 1);
-}
-
-function onAudioEnd() {
-  if (State.isRepeat) { playAyah(State.currentAyah); return; }
-  if (State.currentSurah && State.currentAyah < State.currentSurah.ayahCount) {
-    setTimeout(() => nextAyah(), 500);
-  } else {
-    document.getElementById('play-pause-btn').textContent = '▶';
-    State.isPlaying = false;
-  }
-}
-
-function toggleRepeat() {
-  State.isRepeat = !State.isRepeat;
-  const btn = document.getElementById('repeat-btn');
-  btn.style.color = State.isRepeat ? 'var(--gold)' : '';
-  btn.style.borderColor = State.isRepeat ? 'var(--gold)' : '';
-}
-
-function changeReciter() {
-  State.currentReciter = document.getElementById('reciter-select').value;
-  if (State.isPlaying) playAyah(State.currentAyah);
-}
-
-function stopAudio() {
-  const audio = document.getElementById('quran-player');
-  audio.pause(); audio.src = '';
-  State.isPlaying = false;
-}
-
-function updateProgress() {
-  const audio = document.getElementById('quran-player');
-  if (!audio.duration) return;
-  const pct = (audio.currentTime / audio.duration) * 100;
-  const fill = document.getElementById('progress-fill');
-  if (fill) fill.style.width = pct + '%';
-}
-
-function copyAyah(num, arabic, translation) {
-  const text = `${arabic}\n\n${translation}\n\n— Surah ${State.currentSurah?.englishName}, Verse ${num} | Al-Qur'an Pro · MÎK Edition`;
-  navigator.clipboard.writeText(text).then(() => showToast('Copied! 📋'));
-}
-
-// ── BOOKMARKS ──────────────────────────────────
-function toggleBookmarkSurah() {
-  if (!State.currentSurah) return;
-  const { num, nameAr, nameEn, ayahCount } = State.currentSurah;
-  const idx = State.bookmarks.findIndex(b => b.surahNum === num);
-  if (idx >= 0) {
-    State.bookmarks.splice(idx, 1);
-    showToast('Bookmark removed');
-    document.getElementById('bookmark-btn').style.opacity = '0.5';
-  } else {
-    State.bookmarks.push({ surahNum: num, nameAr, nameEn, ayahCount, date: new Date().toLocaleDateString() });
-    showToast('Bookmarked! 🔖');
-    document.getElementById('bookmark-btn').style.opacity = '1';
-  }
-  localStorage.setItem('mik_bookmarks', JSON.stringify(State.bookmarks));
-}
-
-function bookmarkAyah(num) {
-  if (!State.currentSurah) return;
-  const existing = State.bookmarks.find(b => b.surahNum === State.currentSurah.num && b.ayahNum === num);
-  if (!existing) {
-    State.bookmarks.push({
-      surahNum: State.currentSurah.num,
-      nameEn: State.currentSurah.nameEn,
-      nameAr: State.currentSurah.nameAr,
-      ayahNum: num,
-      date: new Date().toLocaleDateString()
+function openTafsirPage(num,nameEn,nameAr,ayahCount){
+  document.getElementById('tafsir-title').textContent=`${nameEn} — Tafsir`;
+  const c=document.getElementById('tafsir-content');
+  c.innerHTML=`<div class="loading-state"><div class="spinner"></div>Loading Tafsir...</div>`;
+  showPage('page-tafsir-reader');
+  Promise.all([
+    fetch(`https://api.alquran.cloud/v1/surah/${num}`).then(r=>r.json()),
+  ]).then(([ar])=>{
+    c.innerHTML='';
+    ar.data.ayahs.forEach((a,i)=>{
+      const block=document.createElement('div'); block.className='tafsir-ayah-block';
+      block.innerHTML=`<div class="tab-num">VERSE ${a.numberInSurah}</div><div class="tab-arabic">${a.text}</div><div class="tab-text" id="tf-${num}-${a.numberInSurah}"><div class="loading-state"><div class="spinner"></div></div></div>`;
+      c.appendChild(block);
+      if(i<5) loadTafsirText(num,a.numberInSurah);
     });
-    localStorage.setItem('mik_bookmarks', JSON.stringify(State.bookmarks));
-    showToast(`Verse ${num} bookmarked 🔖`);
-  } else {
-    showToast('Already bookmarked');
-  }
+    // Lazy load rest on scroll
+    c.addEventListener('scroll', ()=>{
+      ar.data.ayahs.forEach(a=>{
+        const el=document.getElementById(`tf-${num}-${a.numberInSurah}`);
+        if(el&&el.querySelector('.spinner')){
+          const rect=el.getBoundingClientRect();
+          if(rect.top<window.innerHeight+200) loadTafsirText(num,a.numberInSurah);
+        }
+      });
+    });
+  }).catch(()=>{ c.innerHTML='<div class="loading-state">Failed to load. Check internet.</div>'; });
+}
+function loadTafsirText(surahNum,ayahNum){
+  const el=document.getElementById(`tf-${surahNum}-${ayahNum}`); if(!el) return;
+  fetch(`https://api.quran.com/api/v4/tafsirs/169/by_ayah?ayah_key=${surahNum}:${ayahNum}`)
+    .then(r=>r.json()).then(d=>{
+      const text=cleanTafsir(d.tafsir?.text||'');
+      el.textContent=text||'Tafsir not available for this verse.';
+    }).catch(()=>{ el.textContent='Tafsir unavailable.'; });
 }
 
-function loadBookmarks() {
-  const list = document.getElementById('bookmarks-list');
-  if (!list) return;
-  list.innerHTML = '';
-  if (State.bookmarks.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">🔖</div><div>No bookmarks yet.<br>Tap 🔖 while reading to save.</div></div>';
-    return;
-  }
-  State.bookmarks.forEach((b, i) => {
-    const div = document.createElement('div');
-    div.className = 'bookmark-item';
-    div.innerHTML = `
-      <div class="bookmark-info" onclick="openSurah(${b.surahNum}, '${b.nameAr}', '${b.nameEn}', ${b.ayahCount || 0}, '')">
-        <div class="bookmark-title">${b.nameEn}${b.ayahNum ? ` · Verse ${b.ayahNum}` : ''}</div>
-        <div class="bookmark-sub">Saved ${b.date}</div>
-      </div>
-      <div class="bookmark-arabic">${b.nameAr}</div>
-      <button class="bookmark-del" onclick="deleteBookmark(${i})">🗑</button>
-    `;
-    list.appendChild(div);
+// ═══ AUDIO ═══
+function playAyah(num){
+  if(!S.surah) return;
+  S.ayah=num; S.playing=true;
+  const surahStr=String(S.surah.num).padStart(3,'0'), ayahStr=String(num).padStart(3,'0');
+  const url=`https://cdn.islamic.network/quran/audio/128/${S.reciter}/${S.surah.num*1000+num}.mp3`;
+  const audio=document.getElementById('quran-audio');
+  audio.src=url;
+  audio.play().catch(()=>{
+    const fb=`https://everyayah.com/data/Alafasy_128kbps/${surahStr}${ayahStr}.mp3`;
+    audio.src=fb; audio.play().catch(()=>showToast('Audio unavailable'));
   });
+  document.querySelectorAll('.ayah-item').forEach(e=>e.classList.remove('playing'));
+  const el=document.getElementById(`ay-${num}`);
+  if(el){ el.classList.add('playing'); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+  document.getElementById('play-btn').textContent='⏸';
+  document.getElementById('ap-label').textContent=`Verse ${num} of ${S.surah.ayahCount}`;
+  saveLastRead(S.surah.num,S.surah.nameAr,S.surah.nameEn,num,S.surah.ayahCount);
+}
+function togglePlay(){
+  const a=document.getElementById('quran-audio');
+  if(a.paused){ a.play(); S.playing=true; document.getElementById('play-btn').textContent='⏸'; }
+  else{ a.pause(); S.playing=false; document.getElementById('play-btn').textContent='▶'; }
+}
+function nextAyah(){ if(S.surah&&S.ayah<S.surah.ayahCount) playAyah(S.ayah+1); }
+function prevAyah(){ if(S.ayah>1) playAyah(S.ayah-1); }
+function onAudioEnd(){
+  if(S.repeat){ playAyah(S.ayah); return; }
+  if(S.surah&&S.ayah<S.surah.ayahCount) setTimeout(()=>nextAyah(),600);
+  else{ document.getElementById('play-btn').textContent='▶'; S.playing=false; }
+}
+function toggleRepeat(){
+  S.repeat=!S.repeat;
+  const btn=document.getElementById('repeat-btn');
+  btn.style.color=S.repeat?'var(--gold)':'';
+  btn.style.borderColor=S.repeat?'var(--gold)':'';
+}
+function stopAudio(){ const a=document.getElementById('quran-audio'); a.pause(); a.src=''; S.playing=false; }
+function updateProgress(){
+  const a=document.getElementById('quran-audio'); if(!a.duration) return;
+  const f=document.getElementById('ap-fill'); if(f) f.style.width=((a.currentTime/a.duration)*100)+'%';
+}
+function copyAyah(num,ar,tr){
+  const text=`${ar}\n\n${tr}\n\n— Surah ${S.surah?.nameEn||''}, Verse ${num} | Al-Qur'an Pro · MÎK Edition`;
+  navigator.clipboard.writeText(text).then(()=>showToast('Copied! 📋'));
+}
+function shareAyah(num,ar,tr){
+  const text=`${ar}\n\n${tr}\n\n— Surah ${S.surah?.nameEn||''}, Verse ${num}\nAl-Qur'an Pro · MÎK Edition`;
+  if(navigator.share) navigator.share({title:'Al-Qur\'an — MÎK Edition',text}).catch(()=>{});
+  else copyAyah(num,ar,tr);
 }
 
-function deleteBookmark(i) {
-  State.bookmarks.splice(i, 1);
-  localStorage.setItem('mik_bookmarks', JSON.stringify(State.bookmarks));
-  loadBookmarks();
-  showToast('Removed');
+// ═══ LAST READ ═══
+function saveLastRead(surahNum,nameAr,nameEn,ayahNum,ayahCount){
+  S.lastRead={surahNum,nameAr,nameEn,ayahNum,ayahCount};
+  localStorage.setItem('mik_lr',JSON.stringify(S.lastRead));
+  renderLastRead();
 }
-
-// ── 99 NAMES ──────────────────────────────────
-const ALLAH_NAMES = [
-  ['الرَّحْمَنُ','Ar-Rahman','The Most Gracious'],['الرَّحِيمُ','Ar-Rahim','The Most Merciful'],
-  ['الْمَلِكُ','Al-Malik','The King'],['الْقُدُّوسُ','Al-Quddus','The Most Holy'],
-  ['السَّلَامُ','As-Salam','The Source of Peace'],['الْمُؤْمِنُ','Al-Mumin','The Guardian of Faith'],
-  ['الْمُهَيْمِنُ','Al-Muhaymin','The Protector'],['الْعَزِيزُ','Al-Aziz','The Almighty'],
-  ['الْجَبَّارُ','Al-Jabbar','The Compeller'],['الْمُتَكَبِّرُ','Al-Mutakabbir','The Majestic'],
-  ['الْخَالِقُ','Al-Khaliq','The Creator'],['الْبَارِئُ','Al-Bari','The Evolver'],
-  ['الْمُصَوِّرُ','Al-Musawwir','The Fashioner'],['الْغَفَّارُ','Al-Ghaffar','The Forgiver'],
-  ['الْقَهَّارُ','Al-Qahhar','The Subduer'],['الْوَهَّابُ','Al-Wahhab','The Bestower'],
-  ['الرَّزَّاقُ','Ar-Razzaq','The Provider'],['الْفَتَّاحُ','Al-Fattah','The Opener'],
-  ['الْعَلِيمُ','Al-Alim','The All-Knowing'],['الْقَابِضُ','Al-Qabid','The Restrainer'],
-  ['الْبَاسِطُ','Al-Basit','The Expander'],['الْخَافِضُ','Al-Khafid','The Abaser'],
-  ['الرَّافِعُ','Ar-Rafi','The Exalter'],['الْمُعِزُّ','Al-Muizz','The Giver of Honor'],
-  ['الْمُذِلُّ','Al-Muzil','The Humiliator'],['السَّمِيعُ','As-Sami','The All-Hearing'],
-  ['الْبَصِيرُ','Al-Basir','The All-Seeing'],['الْحَكَمُ','Al-Hakam','The Judge'],
-  ['الْعَدْلُ','Al-Adl','The Just'],['اللَّطِيفُ','Al-Latif','The Subtle'],
-  ['الْخَبِيرُ','Al-Khabir','The All-Aware'],['الْحَلِيمُ','Al-Halim','The Forbearing'],
-  ['الْعَظِيمُ','Al-Azim','The Magnificent'],['الْغَفُورُ','Al-Ghafur','The Forgiving'],
-  ['الشَّكُورُ','Ash-Shakur','The Appreciative'],['الْعَلِيُّ','Al-Ali','The Most High'],
-  ['الْكَبِيرُ','Al-Kabir','The Greatest'],['الْحَفِيظُ','Al-Hafiz','The Preserver'],
-  ['الْمُقِيتُ','Al-Muqit','The Nourisher'],['الْحَسِيبُ','Al-Hasib','The Reckoner'],
-  ['الْجَلِيلُ','Al-Jalil','The Majestic'],['الْكَرِيمُ','Al-Karim','The Most Generous'],
-  ['الرَّقِيبُ','Ar-Raqib','The Watchful'],['الْمُجِيبُ','Al-Mujib','The Responsive'],
-  ['الْوَاسِعُ','Al-Wasi','The All-Encompassing'],['الْحَكِيمُ','Al-Hakim','The Wise'],
-  ['الْوَدُودُ','Al-Wadud','The Loving'],['الْمَجِيدُ','Al-Majid','The Glorious'],
-  ['الْبَاعِثُ','Al-Baith','The Resurrector'],['الشَّهِيدُ','Ash-Shahid','The Witness'],
-  ['الْحَقُّ','Al-Haqq','The Truth'],['الْوَكِيلُ','Al-Wakil','The Trustee'],
-  ['الْقَوِيُّ','Al-Qawi','The Strong'],['الْمَتِينُ','Al-Matin','The Firm'],
-  ['الْوَلِيُّ','Al-Wali','The Protector'],['الْحَمِيدُ','Al-Hamid','The Praiseworthy'],
-  ['الْمُحْصِي','Al-Muhsi','The Counter'],['الْمُبْدِئُ','Al-Mubdi','The Originator'],
-  ['الْمُعِيدُ','Al-Muid','The Restorer'],['الْمُحْيِي','Al-Muhyi','The Giver of Life'],
-  ['الْمُمِيتُ','Al-Mumit','The Taker of Life'],['الْحَيُّ','Al-Hayy','The Ever-Living'],
-  ['الْقَيُّومُ','Al-Qayyum','The Self-Subsisting'],['الْوَاجِدُ','Al-Wajid','The Finder'],
-  ['الْمَاجِدُ','Al-Majid','The Noble'],['الْوَاحِدُ','Al-Wahid','The One'],
-  ['الْأَحَدُ','Al-Ahad','The Unique'],['الصَّمَدُ','As-Samad','The Eternal'],
-  ['الْقَادِرُ','Al-Qadir','The Capable'],['الْمُقْتَدِرُ','Al-Muqtadir','The All-Powerful'],
-  ['الْمُقَدِّمُ','Al-Muqaddim','The Expediter'],['الْمُؤَخِّرُ','Al-Muakhkhir','The Delayer'],
-  ['الْأَوَّلُ','Al-Awwal','The First'],['الْآخِرُ','Al-Akhir','The Last'],
-  ['الظَّاهِرُ','Az-Zahir','The Manifest'],['الْبَاطِنُ','Al-Batin','The Hidden'],
-  ['الْوَالِي','Al-Wali','The Governor'],['الْمُتَعَالِي','Al-Mutaali','The Most Exalted'],
-  ['الْبَرُّ','Al-Barr','The Source of Goodness'],['التَّوَّابُ','At-Tawwab','The Accepter of Repentance'],
-  ['الْمُنْتَقِمُ','Al-Muntaqim','The Avenger'],['الْعَفُوُّ','Al-Afu','The Pardoner'],
-  ['الرَّءُوفُ','Ar-Rauf','The Most Kind'],['مَالِكُ الْمُلْكِ','Malik al-Mulk','Owner of Sovereignty'],
-  ['ذُو الْجَلَالِ','Dhul-Jalal','Lord of Majesty'],['الْمُقْسِطُ','Al-Muqsit','The Equitable'],
-  ['الْجَامِعُ','Al-Jami','The Gatherer'],['الْغَنِيُّ','Al-Ghani','The Self-Sufficient'],
-  ['الْمُغْنِي','Al-Mughni','The Enricher'],['الْمَانِعُ','Al-Mani','The Preventer'],
-  ['الضَّارُّ','Ad-Darr','The Distressor'],['النَّافِعُ','An-Nafi','The Propitious'],
-  ['النُّورُ','An-Nur','The Light'],['الْهَادِي','Al-Hadi','The Guide'],
-  ['الْبَدِيعُ','Al-Badi','The Incomparable'],['الْبَاقِي','Al-Baqi','The Everlasting'],
-  ['الْوَارِثُ','Al-Warith','The Inheritor'],['الرَّشِيدُ','Ar-Rashid','The Guide to Right'],
-  ['الصَّبُورُ','As-Sabur','The Patient'],
-];
-
-function loadNames() {
-  const container = document.getElementById('names-container');
-  if (!container) return;
-  ALLAH_NAMES.forEach((n, i) => {
-    const div = document.createElement('div');
-    div.className = 'name-card';
-    div.innerHTML = `
-      <div class="name-num">${String(i+1).padStart(2,'0')}</div>
-      <div class="name-arabic">${n[0]}</div>
-      <div class="name-transliteration">${n[1]}</div>
-      <div class="name-meaning">${n[2]}</div>
-    `;
-    container.appendChild(div);
-  });
-}
-
-const PROPHET_NAMES = [
-  ['مُحَمَّدٌ','Muhammad','The Praised One'],['أَحْمَدُ','Ahmad','Most Praiseworthy'],
-  ['الْمُصْطَفَى','Al-Mustafa','The Chosen'],['الْمُخْتَارُ','Al-Mukhtar','The Selected'],
-  ['الْأَمِينُ','Al-Amin','The Trustworthy'],['الصَّادِقُ','As-Sadiq','The Truthful'],
-  ['خَاتَمُ النَّبِيِّينَ','Khatam al-Nabiyyin','Seal of Prophets'],['رَسُولُ اللَّهِ','Rasulullah','Messenger of Allah'],
-  ['نَبِيُّ الرَّحْمَةِ','Nabiyy ur-Rahmah','Prophet of Mercy'],['الشَّفِيعُ','Ash-Shafi','The Intercessor'],
-  ['الْحَاشِرُ','Al-Hashir','The Gatherer'],['الْعَاقِبُ','Al-Aqib','The Last Prophet'],
-  ['الْمَاحِي','Al-Mahi','The Obliterator of sins'],['طَهَ','Taha','Pure'],
-  ['يَس','Yasin','Ya Seen'],['الْمُزَّمِّلُ','Al-Muzzammil','The Wrapped'],
-  ['الْمُدَّثِّرُ','Al-Muddaththir','The Enveloped'],['عَبْدُ اللَّهِ','Abdullah','Servant of Allah'],
-  ['حَبِيبُ اللَّهِ','Habibullah','Beloved of Allah'],['نُورٌ','Nur','Light'],
-  ['سِرَاجًا مُنِيرًا','Siraj Munir','Illuminating Lamp'],['رَحْمَةٌ لِلْعَالَمِينَ','Rahmatullil Alamin','Mercy to all Worlds'],
-  ['الشَّاهِدُ','Ash-Shahid','The Witness'],['الْمُبَشِّرُ','Al-Mubashir','The Bringer of Glad Tidings'],
-  ['النَّذِيرُ','An-Nadhir','The Warner'],['الْبَشِيرُ','Al-Bashir','The Bearer of Good News'],
-  ['الدَّاعِي','Ad-Daai','The Caller'],['الشَّهِيدُ','Ash-Shahid','The Witness'],
-  ['الْكَرِيمُ','Al-Karim','The Noble'],['الْكَرِيمُ عَلَى اللَّهِ','Al-Karim alAllah','Noble before Allah'],
-  ['الرَّؤُوفُ','Ar-Rauf','The Kind'],['الرَّحِيمُ','Ar-Rahim','The Merciful'],
-  ['الْمُعَلِّمُ','Al-Muallim','The Teacher'],['الْفَارُوقُ','Al-Faruq','Distinguisher of Truth'],
-  ['الصِّرَاطُ الْمُسْتَقِيمُ','As-Sirat al-Mustaqim','The Straight Path'],
-  ['أَبُو إِبْرَاهِيمَ','Abu Ibrahim','Father of Ibrahim'],['الصَّالِحُ','As-Salih','The Righteous'],
-  ['الطَّاهِرُ','At-Tahir','The Pure'],['الزَّكِيُّ','Az-Zaki','The Chaste'],
-  ['الْوَلِيُّ','Al-Wali','The Friend of Allah'],['الْحَقُّ','Al-Haqq','The Truth'],
-  ['الْكَاشِفُ','Al-Kashif','The Revealer'],['الْمُرْشِدُ','Al-Murshid','The Guide'],
-  ['الشَّرِيفُ','Ash-Sharif','The Noble'],['الْأَشْرَفُ','Al-Ashraf','The Most Noble'],
-  ['الْمُكَرَّمُ','Al-Mukarram','The Honored'],['الْمُعَظَّمُ','Al-Muazzam','The Exalted'],
-  ['الْمَمْدُوحُ','Al-Mamduh','The Praised'],['الْمَحْمُودُ','Al-Mahmud','The Commendable'],
-];
-
-function loadProphetNames() {
-  const container = document.getElementById('prophet-names-container');
-  if (!container) return;
-  PROPHET_NAMES.forEach((n, i) => {
-    const div = document.createElement('div');
-    div.className = 'name-card';
-    div.innerHTML = `
-      <div class="name-num">${String(i+1).padStart(2,'0')}</div>
-      <div class="name-arabic">${n[0]}</div>
-      <div class="name-transliteration">${n[1]}</div>
-      <div class="name-meaning">${n[2]}</div>
-    `;
-    container.appendChild(div);
-  });
-}
-
-// ── TASBEEH ──────────────────────────────────
-function setupRingSVG() {
-  const svg = document.querySelector('.ring-svg');
-  if (!svg) return;
-  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-  defs.innerHTML = `
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#c9963a"/>
-      <stop offset="100%" style="stop-color:#f5d07a"/>
-    </linearGradient>`;
-  svg.insertBefore(defs, svg.firstChild);
-}
-
-function doCount() {
-  State.tasbeehCount++;
-  const countEl = document.getElementById('t-count');
-  if (countEl) {
-    countEl.textContent = State.tasbeehCount;
-    countEl.classList.remove('count-pop');
-    void countEl.offsetWidth;
-    countEl.classList.add('count-pop');
-  }
-  updateRing();
-  if (State.tasbeehCount >= State.tasbeehTarget) {
-    State.tasbeehSets++;
-    State.tasbeehCount = 0;
-    if (countEl) countEl.textContent = '0';
-    const setsEl = document.getElementById('tasbeeh-sets');
-    if (setsEl) setsEl.textContent = State.tasbeehSets;
-    showToast(`MashaAllah! Set ${State.tasbeehSets} complete! 🤲`);
-    updateRing();
-  }
-}
-
-function updateRing() {
-  const ring = document.getElementById('ring-progress');
-  if (!ring) return;
-  const pct = Math.min(State.tasbeehCount / State.tasbeehTarget, 1);
-  const circumference = 2 * Math.PI * 88;
-  ring.style.strokeDashoffset = circumference * (1 - pct);
-}
-
-function resetT() {
-  State.tasbeehCount = 0;
-  State.tasbeehSets = 0;
-  const countEl = document.getElementById('t-count');
-  const setsEl = document.getElementById('tasbeeh-sets');
-  if (countEl) countEl.textContent = '0';
-  if (setsEl) setsEl.textContent = '0';
-  updateRing();
-}
-
-function setTarget(n) {
-  State.tasbeehTarget = n;
-  const el = document.getElementById('tasbeeh-target-display');
-  if (el) el.textContent = n;
-  updateRing();
-}
-
-function changeZikr() {
-  const val = document.getElementById('zikr-select').value;
-  const [arabic, name] = val.split('|');
-  State.currentZikr = { arabic, name };
-  const el = document.getElementById('tasbeeh-arabic');
-  if (el) el.textContent = arabic;
-  resetT();
-}
-
-// ── ZAKAT ──────────────────────────────────
-function calcZakat() {
-  const savings = parseFloat(document.getElementById('zakat-savings').value) || 0;
-  const gold = parseFloat(document.getElementById('zakat-gold').value) || 0;
-  const silver = parseFloat(document.getElementById('zakat-silver').value) || 0;
-  const business = parseFloat(document.getElementById('zakat-business').value) || 0;
-  const debts = parseFloat(document.getElementById('zakat-debts').value) || 0;
-  const currency = document.getElementById('zakat-currency').value;
-
-  const symbols = { USD: '$', PKR: '₨', AFN: '؋', GBP: '£', EUR: '€', SAR: '﷼' };
-  const sym = symbols[currency] || '$';
-
-  const nisab = 4874;
-  const total = savings + gold + silver + business - debts;
-  const amountEl = document.getElementById('zakat-amount');
-  const subEl = document.getElementById('zakat-sub');
-
-  if (total <= 0) {
-    if (amountEl) amountEl.textContent = '—';
-    if (subEl) subEl.textContent = 'Enter your savings above';
-    return;
-  }
-
-  if (total < nisab) {
-    if (amountEl) amountEl.textContent = '0';
-    if (subEl) subEl.textContent = `Below Nisab threshold (${sym}${nisab.toLocaleString()})`;
-    return;
-  }
-
-  const zakat = total * 0.025;
-  if (amountEl) amountEl.textContent = `${sym}${zakat.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
-  if (subEl) subEl.textContent = `2.5% of ${sym}${total.toLocaleString(undefined, {maximumFractionDigits:0})} total assets`;
-}
-
-// ── TOAST ──────────────────────────────────
-let toastTimer;
-function showToast(msg) {
-  const existing = document.querySelector('.toast');
-  if (existing) existing.remove();
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.remove(), 2500);
-}
-
-// ── SERVICE WORKER ──────────────────────────────────
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
+function renderLastRead(){
+  const wrap=document.getElementById('last-read-wrap'); if(!wrap) return;
+  if(!S.lastRead){ wrap.classList.add('hidden'); return; }
+  wrap.classList.remove('hidden');
+  const nm=document.getElementById('lr-name'), sb=document.getElementById('lr-sub');
+  if(nm) nm.textContent=S.
