@@ -1,23 +1,16 @@
 {
-  "name": "Al-Qur'an Pro",
-  "short_name": "Al-Qur'an",
-  "description": "Experience the Holy Quran with translations and prayer times.",
-  "start_url": "./index.html",
+  "name": "Al-Qur'an Pro — MÎK Edition",
+  "short_name": "Al-Qur'an MÎK",
+  "description": "Read the Holy Qur'an with translation, audio recitation, prayer times & more — MÎK Edition",
+  "start_url": "/alquran/",
   "display": "standalone",
-  "background_color": "#2e7d32",
-  "theme_color": "#2e7d32",
+  "background_color": "#080810",
+  "theme_color": "#0a0a0f",
+  "orientation": "portrait",
   "icons": [
-    {
-      "src": "logo.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
+    { "src": "logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "logo.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "categories": ["education", "lifestyle", "religion"],
+  "lang": "en"
 }
