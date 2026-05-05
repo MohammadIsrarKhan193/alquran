@@ -1,4 +1,4 @@
-const CACHE = 'mik-quran-v2';
+const CACHE = 'mik-quran-v3';
 const ASSETS = ['./', './index.html', './style.css', './script.js', './manifest.json'];
 
 self.addEventListener('install', e => {
