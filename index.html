@@ -17,11 +17,17 @@
 
   <!-- SPLASH -->
   <div id="splash" class="splash-screen">
-    <div class="s-orb s-orb1"></div><div class="s-orb s-orb2"></div><div class="s-orb s-orb3"></div>
+    <div class="s-orb s-orb1"></div>
+    <div class="s-orb s-orb2"></div>
+    <div class="s-orb s-orb3"></div>
     <div class="s-grid"></div>
     <div class="s-content">
       <div class="s-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-      <div class="s-logo"><div class="s-ring r1"></div><div class="s-ring r2"></div><div class="s-icon">☽</div></div>
+      <div class="s-logo">
+        <div class="s-ring r1"></div>
+        <div class="s-ring r2"></div>
+        <div class="s-icon">☽</div>
+      </div>
       <h1 class="s-title">Al-Qur'an Pro</h1>
       <p class="s-edition">MÎK Edition</p>
       <div class="s-bar"><div class="s-fill"></div></div>
@@ -31,18 +37,26 @@
 
   <!-- HOME -->
   <div id="page-home" class="page hidden">
-    <div class="bg-orb o1"></div><div class="bg-orb o2"></div>
+    <div class="bg-orb o1"></div>
+    <div class="bg-orb o2"></div>
     <div class="home-scroll">
       <div class="top-bar">
-        <div><div class="hijri-lbl" id="hijri-today">—</div><div class="greeting">As-salāmu ʿalaykum 🌙</div></div>
+        <div>
+          <div class="hijri-lbl" id="hijri-today">—</div>
+          <div class="greeting">As-salāmu ʿalaykum 🌙</div>
+        </div>
         <div class="top-actions">
           <button class="ico-btn" onclick="showPage('page-bookmarks')">🔖</button>
           <button class="ico-btn" id="theme-btn" onclick="toggleTheme()">☀️</button>
         </div>
       </div>
+
       <div class="hero-card">
         <div class="hero-pat"></div>
-        <div class="hero-r1"><span class="hero-lbl">Next Prayer</span><span class="hero-pname" id="next-prayer-name">—</span></div>
+        <div class="hero-r1">
+          <span class="hero-lbl">Next Prayer</span>
+          <span class="hero-pname" id="next-prayer-name">—</span>
+        </div>
         <div class="hero-clock" id="current-time">00:00</div>
         <div class="hero-sub" id="next-prayer-time">Locating...</div>
         <div class="ppills">
@@ -53,28 +67,35 @@
           <div class="ppill"><span>Isha</span><b id="p-isha">--:--</b></div>
         </div>
       </div>
+
       <div class="chips-row">
-        <div class="chip">🌙 <span id="ramadan-txt">Ramadan: ...</span></div>
-        <div class="chip">🎁 <span id="eid-txt">Eid: ...</span></div>
+        <div class="chip" onclick="showPage('page-hijri')" style="cursor:pointer">🌙 <span id="ramadan-txt">Ramadan: ...</span></div>
+        <div class="chip" onclick="showPage('page-hijri')" style="cursor:pointer">🎁 <span id="eid-txt">Eid: ...</span></div>
       </div>
+
       <div id="last-read-wrap" class="hidden">
         <div class="sec-hdr">Continue Reading</div>
         <div class="lr-card" id="lr-card" onclick="continueReading()">
           <div class="lr-ico">📖</div>
-          <div class="lr-info"><div class="lr-name" id="lr-name">—</div><div class="lr-sub" id="lr-sub">—</div></div>
+          <div class="lr-info">
+            <div class="lr-name" id="lr-name">—</div>
+            <div class="lr-sub" id="lr-sub">—</div>
+          </div>
           <div class="lr-arr">›</div>
         </div>
       </div>
+
       <div class="sec-hdr">Features</div>
       <div class="feat-grid">
-        <div class="fc quran-fc" onclick="showPage('page-quran-list')"><div class="fc-ico">📖</div><div class="fc-ar">القرآن</div><div class="fc-nm">Al-Quran</div></div>
-        <div class="fc prayer-fc" onclick="showPage('page-prayers')"><div class="fc-ico">🕌</div><div class="fc-ar">الأذان</div><div class="fc-nm">Prayer Times</div></div>
-        <div class="fc names-fc" onclick="showPage('page-names')"><div class="fc-ico">✨</div><div class="fc-ar">أسماء الله</div><div class="fc-nm">99 Names Allah</div></div>
+        <div class="fc quran-fc"   onclick="showPage('page-quran-list')"><div class="fc-ico">📖</div><div class="fc-ar">القرآن</div><div class="fc-nm">Al-Quran</div></div>
+        <div class="fc prayer-fc"  onclick="showPage('page-prayers')"><div class="fc-ico">🕌</div><div class="fc-ar">الأذان</div><div class="fc-nm">Prayer Times</div></div>
+        <div class="fc hijri-fc"   onclick="showPage('page-hijri')"><div class="fc-ico">📅</div><div class="fc-ar">التقويم</div><div class="fc-nm">Hijri Calendar</div></div>
+        <div class="fc names-fc"   onclick="showPage('page-names')"><div class="fc-ico">✨</div><div class="fc-ar">أسماء الله</div><div class="fc-nm">99 Names Allah</div></div>
         <div class="fc prophet-fc" onclick="showPage('page-names-prophet')"><div class="fc-ico">💚</div><div class="fc-ar">أسماء النبي</div><div class="fc-nm">99 Names Prophet ﷺ</div></div>
         <div class="fc tasbeeh-fc" onclick="showPage('page-tasbeeh')"><div class="fc-ico">📿</div><div class="fc-ar">التسبيح</div><div class="fc-nm">Tasbeeh</div></div>
-        <div class="fc qibla-fc" onclick="showPage('page-qibla')"><div class="fc-ico">🧭</div><div class="fc-ar">القبلة</div><div class="fc-nm">Qibla</div></div>
-        <div class="fc tafsir-fc" onclick="showPage('page-tafsir-home')"><div class="fc-ico">📚</div><div class="fc-ar">التفسير</div><div class="fc-nm">Tafsir</div></div>
-        <div class="fc zakat-fc" onclick="showPage('page-zakat')"><div class="fc-ico">💰</div><div class="fc-ar">الزكاة</div><div class="fc-nm">Zakat</div></div>
+        <div class="fc qibla-fc"   onclick="showPage('page-qibla')"><div class="fc-ico">🧭</div><div class="fc-ar">القبلة</div><div class="fc-nm">Qibla</div></div>
+        <div class="fc tafsir-fc"  onclick="showPage('page-tafsir-home')"><div class="fc-ico">📚</div><div class="fc-ar">التفسير</div><div class="fc-nm">Tafsir</div></div>
+        <div class="fc zakat-fc"   onclick="showPage('page-zakat')"><div class="fc-ico">💰</div><div class="fc-ar">الزكاة</div><div class="fc-nm">Zakat</div></div>
       </div>
     </div>
     <nav class="bnav">
@@ -93,7 +114,9 @@
       <div class="phdr-c"><h2 class="ptitle">Al-Qur'an</h2><div class="par">القرآن الكريم</div></div>
       <button class="ico-btn" onclick="toggleSearch()">🔍</button>
     </div>
-    <div id="sbar" class="sbar hidden"><input id="sinput" type="text" placeholder="Search Surah..." oninput="filterSurahs()"/></div>
+    <div id="sbar" class="sbar hidden">
+      <input id="sinput" type="text" placeholder="Search Surah..." oninput="filterSurahs()"/>
+    </div>
     <div class="jtabs">
       <button class="jtab active" onclick="setTab(this,'surah')">Surah</button>
       <button class="jtab" onclick="setTab(this,'juz')">Juz</button>
@@ -188,7 +211,10 @@
       <div class="fp-item" id="fp-maghrib"><div class="fp-l"><span class="fp-dot"></span>Maghrib</div><b id="fpt-maghrib" class="fp-time">--:--</b></div>
       <div class="fp-item" id="fp-isha"><div class="fp-l"><span class="fp-dot"></span>Isha</div><b id="fpt-isha" class="fp-time">--:--</b></div>
     </div>
-    <div class="adhan-wrap"><h3 class="adhan-hdr">🔔 Adhan Alerts</h3><div id="adhan-list"></div></div>
+    <div class="adhan-wrap">
+      <h3 class="adhan-hdr">🔔 Adhan Alerts</h3>
+      <div id="adhan-list"></div>
+    </div>
     <audio id="adhan-audio" src="https://www.islamcan.com/audio/adhan/azan1.mp3"></audio>
     <nav class="bnav">
       <div class="ni" onclick="setNav(this);showPage('page-home')"><div class="ni-ico">🏠</div><span>Home</span></div>
@@ -197,6 +223,16 @@
       <div class="ni" onclick="setNav(this);showPage('page-tasbeeh')"><div class="ni-ico">📿</div><span>Tasbeeh</span></div>
       <div class="ni active" onclick="setNav(this);showPage('page-prayers')"><div class="ni-ico">⏰</div><span>Prayer</span></div>
     </nav>
+  </div>
+
+  <!-- HIJRI CALENDAR -->
+  <div id="page-hijri" class="page hidden">
+    <div class="phdr">
+      <button class="back-btn" onclick="showPage('page-home')">‹</button>
+      <div class="phdr-c"><h2 class="ptitle">Hijri Calendar</h2><div class="par">التقويم الهجري</div></div>
+      <div style="width:40px"></div>
+    </div>
+    <div id="hijri-page-content" style="flex:1;overflow-y:auto;scrollbar-width:none;padding-bottom:20px;"></div>
   </div>
 
   <!-- QIBLA -->
@@ -208,7 +244,12 @@
     </div>
     <div class="qibla-wrap">
       <div class="compass-outer">
-        <div class="compass-labels"><span class="cl-n">N</span><span class="cl-e">E</span><span class="cl-s">S</span><span class="cl-w">W</span></div>
+        <div class="compass-labels">
+          <span class="cl-n">N</span>
+          <span class="cl-e">E</span>
+          <span class="cl-s">S</span>
+          <span class="cl-w">W</span>
+        </div>
         <div class="compass-needle" id="qibla-needle">
           <div class="needle-tip">▲</div>
           <div class="needle-kaaba">🕋</div>
@@ -259,9 +300,12 @@
       <div class="t-arabic" id="t-arabic">سُبْحَانَ اللَّهِ</div>
       <div class="t-ring-wrap">
         <svg class="t-svg" viewBox="0 0 220 220">
-          <defs><linearGradient id="tGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#c9963a"/><stop offset="100%" style="stop-color:#f5d07a"/>
-          </linearGradient></defs>
+          <defs>
+            <linearGradient id="tGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#c9963a"/>
+              <stop offset="100%" style="stop-color:#f5d07a"/>
+            </linearGradient>
+          </defs>
           <circle class="t-bg" cx="110" cy="110" r="95"/>
           <circle class="t-prog" id="t-prog" cx="110" cy="110" r="95"/>
         </svg>
@@ -302,16 +346,28 @@
       <div class="z-info">Zakat is 2.5% of total savings held above Nisab for one lunar year.</div>
       <label class="zlbl">Currency</label>
       <select id="z-currency" class="sel" onchange="calcZakat()">
-        <option value="USD">USD ($)</option><option value="PKR">PKR (₨)</option>
-        <option value="AFN">AFN (؋)</option><option value="GBP">GBP (£)</option>
-        <option value="EUR">EUR (€)</option><option value="SAR">SAR (﷼)</option>
+        <option value="USD">USD ($)</option>
+        <option value="PKR">PKR (₨)</option>
+        <option value="AFN">AFN (؋)</option>
+        <option value="GBP">GBP (£)</option>
+        <option value="EUR">EUR (€)</option>
+        <option value="SAR">SAR (﷼)</option>
       </select>
-      <label class="zlbl">Total Savings</label><input type="number" id="z-savings" class="zinput" placeholder="Your savings amount" oninput="calcZakat()"/>
-      <label class="zlbl">Gold Value</label><input type="number" id="z-gold" class="zinput" placeholder="Value of gold owned" oninput="calcZakat()"/>
-      <label class="zlbl">Silver Value</label><input type="number" id="z-silver" class="zinput" placeholder="Value of silver owned" oninput="calcZakat()"/>
-      <label class="zlbl">Business Assets</label><input type="number" id="z-business" class="zinput" placeholder="Business inventory" oninput="calcZakat()"/>
-      <label class="zlbl">Debts (subtract)</label><input type="number" id="z-debts" class="zinput" placeholder="Loans / debts owed" oninput="calcZakat()"/>
-      <div class="z-result"><div class="zr-lbl">Your Zakat</div><div class="zr-amt" id="zr-amt">—</div><div class="zr-sub" id="zr-sub">Enter your savings above</div></div>
+      <label class="zlbl">Total Savings</label>
+      <input type="number" id="z-savings" class="zinput" placeholder="Your savings amount" oninput="calcZakat()"/>
+      <label class="zlbl">Gold Value</label>
+      <input type="number" id="z-gold" class="zinput" placeholder="Value of gold owned" oninput="calcZakat()"/>
+      <label class="zlbl">Silver Value</label>
+      <input type="number" id="z-silver" class="zinput" placeholder="Value of silver owned" oninput="calcZakat()"/>
+      <label class="zlbl">Business Assets</label>
+      <input type="number" id="z-business" class="zinput" placeholder="Business inventory" oninput="calcZakat()"/>
+      <label class="zlbl">Debts (subtract)</label>
+      <input type="number" id="z-debts" class="zinput" placeholder="Loans / debts owed" oninput="calcZakat()"/>
+      <div class="z-result">
+        <div class="zr-lbl">Your Zakat</div>
+        <div class="zr-amt" id="zr-amt">—</div>
+        <div class="zr-sub" id="zr-sub">Enter your savings above</div>
+      </div>
     </div>
   </div>
 
@@ -320,23 +376,3 @@
     <div class="phdr">
       <button class="back-btn" onclick="showPage('page-home')">‹</button>
       <div class="phdr-c"><h2 class="ptitle">Bookmarks</h2><div class="par">المفضلة</div></div>
-      <div style="width:40px"></div>
-    </div>
-    <div id="bm-list" class="bm-list"></div>
-  </div>
-
-  <!-- TAFSIR BOTTOM SHEET -->
-  <div id="tafsir-sheet" class="t-sheet hidden">
-    <div class="t-overlay" onclick="closeSheet()"></div>
-    <div class="t-sheet-body">
-      <div class="t-sheet-handle"></div>
-      <div class="t-sheet-hdr"><span class="t-sheet-title" id="sheet-title">Tafsir</span><button class="t-sheet-close" onclick="closeSheet()">✕</button></div>
-      <div class="t-sheet-ar" id="sheet-ar"></div>
-      <div class="t-sheet-txt" id="sheet-txt">Loading...</div>
-    </div>
-  </div>
-
-</div>
-<script src="script.js"></script>
-</body>
-</html>
